@@ -1,27 +1,23 @@
 #ifndef JOB_H
 #define JOB_H
 
-//#include <QtSql>
-
 #include <iostream>
 
 #include <QString>
 #include <QStringList>
 #include <QSet>
 
+#include "items/postinfo.h"
+
 using namespace std;
-
-namespace job {
-    const QString INIT_URL = "initial_url";
-}
-
-//typedef QSet<QString> ItemSet;
 
 class Job
 {
 public:
     Job();
     ~Job();
+
+    static const QString INITIAL_URL;
 
     friend ostream &operator<<(ostream &os, const Job &job);
 
@@ -30,9 +26,9 @@ public:
     QStringList tags;
     QString save_path;
 
-    QSet<QString> pic_types;
-    QSet<QString> rating;
-    QSet<QString> file_types;
+    QSet<PicType> pic_types;
+    QSet<PostRating> rating;
+    QSet<PicFormat> file_types;
 
     QString lastSearchUrl;
 
@@ -44,7 +40,9 @@ public:
     bool posts_done;
 
     int getId() const;
-    void setId(int value);
+    void setId(const int value);
+
+//    bool picType(QString pictype) const;
 
 private:
 };

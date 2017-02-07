@@ -36,7 +36,7 @@ void Grabber::startJob(Job currJob)
         parser = new SankakuParser();
     }
     if (!currJob.search_done) {
-        if (currJob.lastSearchUrl == job::INIT_URL) {
+        if (currJob.lastSearchUrl == Job::INITIAL_URL) {
             QString initialUrl = parser->genQueryUrl(currJob.tags);
             this->jobManager->updSearch(initialUrl, currJob.id);
             currJob.lastSearchUrl = initialUrl;
@@ -83,15 +83,15 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
         QString postUrl = postList.at(i).url;
 
         QString postHtml = loader.loadHtml(postUrl);
-        PostInfo parseInfo = parser->parsePost(postHtml);
+        PostInfo postInfo = parser->parsePost(postHtml);
 
-        cout << parseInfo << endl;
+        cout << postInfo << endl;
 
-
-        if (currJob.rating.contains(parseInfo.rating)) {
+        if (currJob.rating.contains(postInfo.rating)) {
+            QList<PicInfo> picList = postInfo.pics;
             QList<PicInfo> okList;
-            for (int j = 0; j < parseInfo.pics.count(); j++) {
-                PicInfo picInfo = parseInfo.pics.at(j);
+            for (int j = 0; j < picList.count(); j++) {
+                PicInfo picInfo = picList.at(j);
                 if (
                         (currJob.pic_types.contains(picInfo.type)) &&
                         (currJob.file_types.contains(picInfo.format))
@@ -103,7 +103,6 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
             this->jobManager->addPics(okList, currJob.id);
             this->jobManager->postDone(postList.at(i).id);
         }
-
     }
     this->jobManager->postsDone(currJob.id);
     cout << "POSTS FINISH" << endl;
@@ -111,12 +110,19 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
 
 void Grabber::picsDownload(int jobID)
 {
+    cout << "PICS DOWNLOAD" << endl;
     QList<PicInfo> picList = this->jobManager->readPics(jobID);
     Loader loader;
     for (int i = 0; i < picList.count(); i++) {
         PicInfo picInfo = picList.at(i);
+
+        cout << "LOAD #" << i+1 << endl;
+        cout << picInfo.name.toStdString() << endl;
+        cout << picInfo.url.toStdString() << endl;
+
         loader.loadFile(picInfo.url, picInfo.name);
         this->jobManager->picDone(picInfo.id);
     }
     this->jobManager->picsDone(jobID);
+    cout << "DOWNLOAD COMPLETE" << endl;
 }

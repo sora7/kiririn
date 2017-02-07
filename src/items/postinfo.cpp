@@ -10,9 +10,24 @@ PostInfo::~PostInfo()
 {
 }
 
+string PostInfo::to_str(PostRating postRating)
+{
+    switch (postRating) {
+        case SAFE: {
+            return "safe";
+        }
+        case QUESTIONABLE: {
+            return "questionable";
+        }
+        case EXPLICIT: {
+            return "explicit";
+        }
+    }
+}
+
 ostream& operator <<(ostream &os, const PostInfo &postInfo)
 {
-    os << "rating: " << postInfo.rating.toStdString() << endl;
+    os << "rating: " << PostInfo::to_str(postInfo.rating) << endl;
     os << "========================== PICS ==========================" << endl;
     for(int i = 0; i < postInfo.pics.count(); i++) {
         cout << "pic #" << i+1 << endl;

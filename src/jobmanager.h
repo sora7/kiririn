@@ -48,8 +48,11 @@ private:
 
     QSqlTableModel *_jobModel;
 
-    QString pack_qset(QSet<QString> set);
-    QSet<QString> unpack_qset(QString str);
+    template <class T>
+    QString pack_qset(QSet<T> set);
+
+    template <class T>
+    QSet<T> unpack_qset(QString str);
 };
 
 #endif // JOBMANAGER_H

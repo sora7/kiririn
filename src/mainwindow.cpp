@@ -80,39 +80,39 @@ Job MainWindow::getJobSettings()
     job.save_path = ui->lineEdit_savepath->text();
 
     if (ui->checkBox_rt_safe->isChecked()) {
-        job.rating << "safe";
+        job.rating << SAFE;
     }
     if (ui->checkBox_rt_questionable->isChecked()) {
-        job.rating << "questionable";
+        job.rating << QUESTIONABLE;
     }
     if (ui->checkBox_rt_explicit->isChecked()) {
-        job.rating << "explicit";
+        job.rating << EXPLICIT;
     }
 
 
     if (ui->checkBox_pt_original->isChecked()) {
-        job.pic_types << "original";
+        job.pic_types << ORIGINAL;
     }
 
     if (ui->checkBox_pt_resized->isChecked()) {
-        job.pic_types << "resized";
+        job.pic_types << RESIZED;
     }
 
 
     if (ui->checkBox_ft_jpg->isChecked()) {
-        job.file_types << "jpg";
+        job.file_types << JPG;
     }
     if (ui->checkBox_ft_png->isChecked()) {
-        job.file_types << "png";
+        job.file_types << PNG;
     }
     if (ui->checkBox_ft_gif->isChecked()) {
-        job.file_types << "gif";
+        job.file_types << GIF;
     }
     if (ui->checkBox_ft_webm->isChecked()) {
-        job.file_types << "webm";
+        job.file_types << WEBM;
     }
     if (ui->checkBox_ft_mp4->isChecked()) {
-        job.file_types << "mp4";
+        job.file_types << MP4;
     }
     cout << job << endl;
     return job;

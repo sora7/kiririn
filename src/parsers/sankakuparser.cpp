@@ -76,9 +76,9 @@ QList<PicInfo> SankakuParser::getPics(QString htmlText)
         QString origSize = rxOrig.cap(5);
 
         PicInfo picInfo;
-        picInfo.type   = "original";
+        picInfo.type   = ORIGINAL;
         picInfo.name   = origName;
-        picInfo.format = origExt;
+        picInfo.format = checkFormat( origExt );
         picInfo.url    = "https:" + origUrl;
         picInfo.size   = origSize;
         picInfo.res    = origRes;
@@ -101,9 +101,9 @@ QList<PicInfo> SankakuParser::getPics(QString htmlText)
         QString resRes  = rxResize.cap(4);
 
         PicInfo picInfo2;
-        picInfo2.type   = "resized";
+        picInfo2.type   = RESIZED;
         picInfo2.name   = resName;
-        picInfo2.format = resExt;
+        picInfo2.format = checkFormat( resExt );
         picInfo2.url    = "https:" + resUrl;
         picInfo2.res    = resRes;
 
@@ -112,9 +112,9 @@ QList<PicInfo> SankakuParser::getPics(QString htmlText)
     return pics;
 }
 
-QString SankakuParser::getRating(QString htmlText)
+PostRating SankakuParser::getRating(QString htmlText)
 {
-    QString rating;
+    PostRating rating;
 
 //    <li>Rating: Safe</li>
 //    <li>Rating: Questionable</li>
@@ -124,13 +124,13 @@ QString SankakuParser::getRating(QString htmlText)
     int pos = rxRating.indexIn(htmlText);
     if (pos > -1) {
         if (rxRating.cap(1) == "Safe"){
-            rating = "safe";
+            rating = SAFE;
         }
         if (rxRating.cap(1) == "Questionable"){
-            rating = "questionable";
+            rating = QUESTIONABLE;
         }
         if (rxRating.cap(1) == "Explicit"){
-            rating = "explicit";
+            rating = EXPLICIT;
         }
     }
     return rating;

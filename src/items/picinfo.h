@@ -6,16 +6,19 @@
 
 using namespace std;
 
-namespace pic_type {
-    const int ORIGINAL = 1;
-    const int RESIZED = 2;
+enum PicType {
+    ORIGINAL,
+    RESIZED
+};
 
-    const int FORMAT_JPG  = 1;
-    const int FORMAT_PNG  = 2;
-    const int FORMAT_GIF  = 3;
-    const int FORMAT_WEBM = 4;
-    const int FORMAT_MP4  = 5;
-}
+enum PicFormat {
+    JPG,
+    PNG,
+    GIF,
+    WEBM,
+    MP4,
+    UNDEFINED
+};
 
 class PicInfo
 {
@@ -25,10 +28,13 @@ public:
 
     friend ostream &operator<<(ostream &os, const PicInfo &picInfo);
 
+    static string to_str(PicType picType);
+    static string to_str(PicFormat picFormat);
+
     int id;
 
-    QString type;   //orig, resize
-    QString format; //jpg, png, webm, mp4
+    PicType type;   //orig, resize
+    PicFormat format; //jpg, png, webm, mp4
     QString url;
     QString name;
 

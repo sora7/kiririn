@@ -23,7 +23,7 @@ Parser::~Parser()
 //    return html_text;
 //}
 
-/*static*/ QString Parser::readFile(QString filename)
+QString Parser::readFile(QString filename)
 {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -38,6 +38,26 @@ Parser::~Parser()
     }
 
     return QString(total);
+}
+
+PicFormat Parser::checkFormat(QString str)
+{
+    if (str == "jpg") {
+        return JPG;
+    }
+    if (str == "png") {
+        return PNG;
+    }
+    if (str == "gif") {
+        return GIF;
+    }
+    if (str == "webm") {
+        return WEBM;
+    }
+    if (str == "mp4") {
+        return MP4;
+    }
+    return UNDEFINED;
 }
 
 SearchInfo Parser::parseSearch(QString htmlText)

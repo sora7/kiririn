@@ -16,6 +16,12 @@ namespace post_rating {
     const int EXPLICIT = 3;
 }
 
+enum PostRating {
+    SAFE,
+    QUESTIONABLE,
+    EXPLICIT
+};
+
 class PostInfo
 {
 public:
@@ -24,12 +30,13 @@ public:
 
     friend ostream &operator<<(ostream &os, const PostInfo &postInfo);
 
+    static string to_str(PostRating postRating);
+
     int id;
     QString url;
 
 
-    QString rating;
-//    QStringList tags;
+    PostRating rating;
     QList<PicInfo> pics;
 };
 

@@ -51,21 +51,6 @@ void JobManager::checkTables()
         checkQuery.exec(jobsSql);
     }
 
-//    selectString = "SELECT * FROM sqlite_master WHERE name = 'search' "
-//                   "AND type = 'table';";
-//    checkQuery.exec(selectString);
-
-//    if (!checkQuery.next()) {
-//        QString jobsSql = "CREATE TABLE `search` ("
-//                          "`SearchID` INTEGER NOT NULL PRIMARY KEY "
-//                          "AUTOINCREMENT,"
-//                          "`JobID` INTEGER NOT NULL,"
-//                          "`url` TEXT NOT NULL,"
-//                          "`done` INTEGER NOT NULL,"
-//                          "`try` INTEGER NOT NULL);";
-//        checkQuery.exec(jobsSql);
-//    }
-
     selectString = "SELECT * FROM sqlite_master WHERE name = 'posts' "
                    "AND type = 'table';";
     checkQuery.exec(selectString);
@@ -153,12 +138,13 @@ Job JobManager::getJob(int jobID)
         selectJob.save_path = selectQuery.value(
                     rec.indexOf("save_path")).toString();
 
-        selectJob.pic_types = unpack_qset(
+        selectJob.pic_types = unpack_qset <PicType> (
                     selectQuery.value(rec.indexOf("pic_types")).toString());
-        selectJob.rating = unpack_qset(
+        selectJob.rating = unpack_qset <PostRating> (
                     selectQuery.value(rec.indexOf("rating")).toString());
-        selectJob.file_types = unpack_qset(
+        selectJob.file_types = unpack_qset <PicFormat> (
                     selectQuery.value(rec.indexOf("file_types")).toString());
+
         selectJob.filenames = selectQuery.value(rec.indexOf("filenames")).toString();
         selectJob.try_max = selectQuery.value(rec.indexOf("try_max")).toInt();
         selectJob.lastSearchUrl = selectQuery.value(rec.indexOf("last_search_url")).toString();
@@ -191,10 +177,10 @@ Job JobManager::getLastJob()
 void JobManager::updSearch(QString searchUrl, int jobID)
 {
     QSqlQuery updateQuery(QSqlDatabase::database());
-    QString updateString = "UPDATE jobs SET last_search_url = %1 "
+    QString updateString = "UPDATE jobs SET last_search_url = '%1' "
                            "WHERE JobID = %2";
     updateString = updateString.arg(searchUrl).arg(jobID);
-    cout << "UPD EXEC" << endl;
+//    cout << "UPD EXEC" << endl;
     updateQuery.exec(updateString);
 }
 
@@ -325,13 +311,25 @@ void JobManager::picsDone(int jobID)
     updateQuery.exec(updateString);
 }
 
-QString JobManager::pack_qset(QSet<QString> set)
+template <class T>
+QString JobManager::pack_qset(QSet<T> set)
 {
-    return QStringList(set.toList()).join(SEP);
+    QList<T> t_list = set.toList();
+    QStringList strList;
+    for (int i = 0; i < t_list.count(); i++) {
+        strList << QString::number(t_list.at(i));
+    }
+
+    return strList.join(SEP);
 }
 
-QSet<QString> JobManager::unpack_qset(QString str)
+template <class T>
+QSet<T> JobManager::unpack_qset(QString str)
 {
-    QSet<QString> set = QSet<QString>::fromList(str.split(SEP));
+    QStringList strList = str.split(SEP);
+    QSet<T> set;
+    for (int i = 0; i < strList.count(); i++) {
+        set << (T)strList.at(i).toInt();
+    }
     return set;
 }

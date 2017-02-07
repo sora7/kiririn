@@ -19,7 +19,7 @@ private:
     QStringList getPosts(QString htmlText);
 
     QList<PicInfo> getPics(QString htmlText);
-    QString getRating(QString htmlText);
+    PostRating getRating(QString htmlText);
 };
 
 #endif // SANKAKUPARSER_H
