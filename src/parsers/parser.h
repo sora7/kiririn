@@ -38,7 +38,7 @@ protected:
     Liste:
 
     Danbooru-alike:
-        SankakuChannel
+        SankakuChannel  *
         Konachan
         Yande.re
         Safebooru
@@ -47,4 +47,6 @@ protected:
     Shimmie-alike:
         Mishimmie
         4chanhouse
+    Other:
+        favim.ru
 */

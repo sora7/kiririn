@@ -35,5 +35,5 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-LIBS += e:\\PROG\\c++\\QtProjects\\kiririn\\build\\release\\libcurl.dll
+LIBS += ../build/libcurl.dll
 

@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-//favim.ru
+
 #include <iostream>
 
 #include "loader.h"

@@ -12,7 +12,7 @@
 #include <QTime>
 #include <QCoreApplication>
 
-#include "curl/curl.h"
+#include <curl/curl.h>
 
 using namespace std;
 
