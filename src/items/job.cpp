@@ -1,17 +1,17 @@
 #include "job.h"
 
-const QString Job::INITIAL_URL = "initial_url";
-
 Job::Job()
 {
-    this->done = false;
-    this->search_done = false;
-    this->posts_done = false;
+//    this->done = false;
+//    this->search_done = false;
+//    this->posts_done = false;
+
+    this->status = READY;
 
     this->filenames = "%fname%";
     this->try_max = 3;
 
-    this->lastSearchUrl = Job::INITIAL_URL;
+    this->lastSearchUrl = QString("");
 }
 
 Job::~Job()
@@ -71,7 +71,64 @@ void Job::setId(const int value)
     id = value;
 }
 
-//bool Job::picType(QString pictype) const
-//{
-//    return this->pic_types.contains(pictype);
-//}
+void Job::addRating(const PostRating postRating)
+{
+    this->rating << postRating;
+}
+
+void Job::addType(const PicType picType)
+{
+    this->pic_types << picType;
+}
+
+void Job::addFormat(const PicFormat picFormat)
+{
+    this->file_types << picFormat;
+}
+
+bool Job::okRating(const PostRating postRating) const
+{
+    return this->rating.contains(postRating);
+}
+
+bool Job::okType(const PicType picType) const
+{
+    return this->pic_types.contains(picType);
+}
+
+bool Job::okFormat(const PicFormat picFormat) const
+{
+    return this->file_types.contains(picFormat);
+}
+
+string Job::to_str(JobStatus jobStatus)
+{
+    switch (jobStatus) {
+        case READY: {
+            return "ready";
+        }
+        case SEARCH_START: {
+            return "search start";
+        }
+        case SEARCH_DONE: {
+            return "search done";
+        }
+        case POSTS_DONE: {
+            return "posts done";
+        }
+        case PICS_DONE: {
+            return "picsc done";
+        }
+    }
+    return "";
+}
+
+JobStatus Job::getStatus() const
+{
+    return status;
+}
+
+void Job::setStatus(const JobStatus jobStatus)
+{
+    status = jobStatus;
+}

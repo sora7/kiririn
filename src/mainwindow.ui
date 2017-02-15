@@ -121,6 +121,13 @@
               </widget>
              </item>
              <item>
+              <widget class="QCheckBox" name="checkBox_rt_OTHER">
+               <property name="text">
+                <string>OTHER</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <spacer name="verticalSpacer">
                <property name="orientation">
                 <enum>Qt::Vertical</enum>

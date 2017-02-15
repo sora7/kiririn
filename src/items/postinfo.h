@@ -19,7 +19,8 @@ namespace post_rating {
 enum PostRating {
     SAFE,
     QUESTIONABLE,
-    EXPLICIT
+    EXPLICIT,
+    RT_OTHER
 };
 
 class PostInfo

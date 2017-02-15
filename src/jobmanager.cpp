@@ -45,9 +45,7 @@ void JobManager::checkTables()
                         "`filenames` TEXT NOT NULL,"
                         "`try_max` INTEGER NOT NULL,"
                         "`last_search_url` TEXT NOT NULL,"
-                        "`done` INTEGER NOT NULL,"
-                        "`search_done` INTEGER NOT NULL,"
-                        "`posts_done` INTEGER NOT NULL);";
+                        "`status` INTEGER NOT NULL);";
         checkQuery.exec(jobsSql);
     }
 
@@ -98,19 +96,20 @@ void JobManager::addJob(Job job)
 
     //service
     QString last_search_url = job.lastSearchUrl;
-    int done = job.done;
-    int search_done = job.search_done;
-    int posts_done = job.posts_done;
+
+    int status = job.status;
+//    int search_done = job.search_done;
+//    int posts_done = job.posts_done;
 
     QString insertString("INSERT INTO jobs(site, tags, save_path, pic_types, "
                          "rating, file_types, filenames, try_max, "
-                         "last_search_url, done, search_done, posts_done) "
+                         "last_search_url, status) "
                          "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', "
-                         "%8, '%9', %10, %11, %12);");
+                         "%8, '%9', %10);");
 
     QString str = insertString.arg(site).arg(tags).arg(save_path);
     str = str.arg(pic_types).arg(rating).arg(file_types).arg(filenames);
-    str = str.arg(try_max).arg(last_search_url).arg(done).arg(search_done).arg(posts_done);
+    str = str.arg(try_max).arg(last_search_url).arg(status);
 
     cout << str.toStdString() << endl;
 
@@ -149,9 +148,11 @@ Job JobManager::getJob(int jobID)
         selectJob.try_max = selectQuery.value(rec.indexOf("try_max")).toInt();
         selectJob.lastSearchUrl = selectQuery.value(rec.indexOf("last_search_url")).toString();
 
-        selectJob.done = selectQuery.value(rec.indexOf("done")).toBool();
-        selectJob.search_done = selectQuery.value(rec.indexOf("search_done")).toBool();
-        selectJob.posts_done = selectQuery.value(rec.indexOf("posts_done")).toBool();
+        selectJob.status = (JobStatus)selectQuery.value(rec.indexOf("done")).toInt();
+
+//        selectJob.done = selectQuery.value(rec.indexOf("done")).toBool();
+//        selectJob.search_done = selectQuery.value(rec.indexOf("search_done")).toBool();
+//        selectJob.posts_done = selectQuery.value(rec.indexOf("posts_done")).toBool();
     }
 
     return selectJob;
@@ -160,8 +161,11 @@ Job JobManager::getJob(int jobID)
 Job JobManager::getLastJob()
 {
     QSqlQuery selectQuery(QSqlDatabase::database());
-    QString selectString = "SELECT JobID FROM jobs WHERE done = 0 ORDER BY JobID"
-                           " DESC LIMIT 1;";
+
+    QString selectString = "SELECT JobID FROM jobs WHERE status = %1 "
+                           "ORDER BY JobID DESC LIMIT 1;";
+    int jobStatus = READY;
+    selectString = selectString.arg(jobStatus);
 
     selectQuery.exec(selectString);
     QSqlRecord rec = selectQuery.record();
@@ -176,12 +180,14 @@ Job JobManager::getLastJob()
 
 void JobManager::updSearch(QString searchUrl, int jobID)
 {
+    cout << "UPD SEARCH BEGIN" << endl;
     QSqlQuery updateQuery(QSqlDatabase::database());
     QString updateString = "UPDATE jobs SET last_search_url = '%1' "
                            "WHERE JobID = %2";
     updateString = updateString.arg(searchUrl).arg(jobID);
-//    cout << "UPD EXEC" << endl;
+    cout << "UPD SEARCH EXEC" << endl;
     updateQuery.exec(updateString);
+    cout << "UPD SEARCH EXEC END" << endl;
 }
 
 void JobManager::addPosts(QStringList postUrls, int jobID)
@@ -199,15 +205,26 @@ void JobManager::addPosts(QStringList postUrls, int jobID)
     cout << postUrls.count() << " POSTS ADDED" << endl;
 }
 
-void JobManager::searchDone(int jobID)
+void JobManager::updStatus(JobStatus jobStatus, int jobID)
 {
     QSqlQuery updateQuery(QSqlDatabase::database());
-    QString updateString = "UPDATE jobs SET search_done = 1 "
-                           "WHERE JobID = %1";
-    updateString = updateString.arg(jobID);
-
+    QString updateString = "UPDATE jobs SET status = %1 "
+                           "WHERE JobID = %2";
+    updateString = updateString.arg(jobStatus).arg(jobID);
+    cout << "UPD STATUS EXEC" << endl;
     updateQuery.exec(updateString);
+    cout << "UPD STATUS EXEC END" << endl;
 }
+
+//void JobManager::searchDone(int jobID)
+//{
+//    QSqlQuery updateQuery(QSqlDatabase::database());
+//    QString updateString = "UPDATE jobs SET search_done = 1 "
+//                           "WHERE JobID = %1";
+//    updateString = updateString.arg(jobID);
+
+//    updateQuery.exec(updateString);
+//}
 
 QList<PostInfo> JobManager::readPosts(int jobID)
 {
@@ -257,15 +274,15 @@ void JobManager::addPics(QList<PicInfo> picList, int jobID)
     cout << picList.count() << " PICS ADDED" << endl;
 }
 
-void JobManager::postsDone(int jobID)
-{
-    QSqlQuery updateQuery(QSqlDatabase::database());
-    QString updateString = "UPDATE jobs SET posts_done = 1 "
-                           "WHERE JobID = %1";
-    updateString = updateString.arg(jobID);
+//void JobManager::postsDone(int jobID)
+//{
+//    QSqlQuery updateQuery(QSqlDatabase::database());
+//    QString updateString = "UPDATE jobs SET posts_done = 1 "
+//                           "WHERE JobID = %1";
+//    updateString = updateString.arg(jobID);
 
-    updateQuery.exec(updateString);
-}
+//    updateQuery.exec(updateString);
+//}
 
 QList<PicInfo> JobManager::readPics(int jobID)
 {
@@ -301,15 +318,15 @@ void JobManager::picDone(int picID)
     updateQuery.exec(updateString);
 }
 
-void JobManager::picsDone(int jobID)
-{
-    QSqlQuery updateQuery(QSqlDatabase::database());
-    QString updateString = "UPDATE jobs SET done = 1 "
-                           "WHERE JobID = %1";
-    updateString = updateString.arg(jobID);
+//void JobManager::picsDone(int jobID)
+//{
+//    QSqlQuery updateQuery(QSqlDatabase::database());
+//    QString updateString = "UPDATE jobs SET done = 1 "
+//                           "WHERE JobID = %1";
+//    updateString = updateString.arg(jobID);
 
-    updateQuery.exec(updateString);
-}
+//    updateQuery.exec(updateString);
+//}
 
 template <class T>
 QString JobManager::pack_qset(QSet<T> set)

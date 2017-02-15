@@ -36,6 +36,8 @@ private:
     Grabber grabber;
 
     void bindHandlers();
+
+    void test();
 };
 
 #endif // MAINWINDOW_H

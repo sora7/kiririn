@@ -24,6 +24,8 @@ public:
 private:
     JobManager* jobManager;
 
+    Job _currentJob;
+
     void startJob(Job currJob);
 
     void searchProcess(QString searchUrl, Parser* parser, int jobID);

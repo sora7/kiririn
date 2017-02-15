@@ -22,7 +22,11 @@ string PostInfo::to_str(PostRating postRating)
         case EXPLICIT: {
             return "explicit";
         }
+        case RT_OTHER: {
+            return "all";
+        }
     }
+    return "";
 }
 
 ostream& operator <<(ostream &os, const PostInfo &postInfo)

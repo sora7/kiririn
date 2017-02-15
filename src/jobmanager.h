@@ -23,8 +23,6 @@ public:
 
     QSqlTableModel* jobModel();
 
-    void checkTables();
-
     void addJob(Job job);
     Job getJob(int jobID);
     Job getLastJob();
@@ -32,7 +30,10 @@ public:
     //search
     void updSearch(QString searchUrl, int jobID);
     void addPosts(QStringList postUrls, int jobID);
-    void searchDone(int jobID);
+
+    void updStatus(JobStatus jobStatus, int jobID);
+
+//    void searchDone(int jobID);
     //posts
     QList<PostInfo> readPosts(int jobID);
     void postDone(int postID);
@@ -47,6 +48,8 @@ private:
     QSqlDatabase job_db;
 
     QSqlTableModel *_jobModel;
+
+    void checkTables();
 
     template <class T>
     QString pack_qset(QSet<T> set);
