@@ -31,16 +31,30 @@ public:
     static string to_str(PicType picType);
     static string to_str(PicFormat picFormat);
 
-    int id;
 
-    PicType type;   //orig, resize
-    PicFormat format; //jpg, png, webm, mp4
-    QString url;
-    QString name;
 
-    QString res;    // 1024x768
-    QString size;   // KB
-    int done;
+//    QString res;    // 1024x768
+//    QString size;   // KB
+//    int done;
+
+    int getId() const;
+    void setId(int value);
+    PicType getType() const;
+    void setType(const PicType &value);
+    PicFormat getFormat() const;
+    void setFormat(const PicFormat &value);
+    QString getUrl() const;
+    void setUrl(const QString &value);
+    QString getName() const;
+    void setName(const QString &value);
+private:
+    int _id;
+
+    PicType _type;   //orig, resize
+    PicFormat _format; //jpg, png, webm, mp4
+
+    QString _url;
+    QString _name;
 };
 
 #endif // PICINFO_H

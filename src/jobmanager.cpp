@@ -1,10 +1,12 @@
 #include "jobmanager.h"
 
+const QString JobManager::DB_PATH = QString("jobs.db");
+
 JobManager::JobManager()
 {
-    this->job_db = QSqlDatabase::addDatabase("QSQLITE");
-    this->job_db.setDatabaseName(DB_PATH);
-    this->job_db.open();
+    this->_job_db = QSqlDatabase::addDatabase("QSQLITE");
+    this->_job_db.setDatabaseName(this->DB_PATH);
+    this->_job_db.open();
 
     this->checkTables();
 
@@ -17,7 +19,7 @@ JobManager::~JobManager()
 {
     delete this->_jobModel;
 
-    this->job_db.close();
+    this->_job_db.close();
 }
 
 QSqlTableModel *JobManager::jobModel()
@@ -82,22 +84,22 @@ void JobManager::addJob(Job job)
 {
     QSqlQuery addQuery(QSqlDatabase::database());
 
-    QString site = job.site;
-    QString tags = job.tags.join(SEP);
-    QString save_path = job.save_path;
+    QString site = job.getSite();
+    QString tags = job.getTags().join(SEP);
+    QString save_path = job.getSavePath();
 
-    QString pic_types = pack_qset(job.pic_types);
-    QString rating = pack_qset(job.rating);
-    QString file_types = pack_qset(job.file_types);
+    QString pic_types = pack_qset(job.getPicTypes());
+    QString rating = pack_qset(job.getRating());
+    QString file_types = pack_qset(job.getPicFormats());
 
     //defaults
-    QString filenames = job.filenames;
-    int try_max = job.try_max;
+    QString filenames = job.getFilenameTemplate();
+    int try_max = job.getTryMax();
 
     //service
-    QString last_search_url = job.lastSearchUrl;
+    QString last_search_url = job.getLastSearchUrl();
 
-    int status = job.status;
+    int status = job.getStatus();
 //    int search_done = job.search_done;
 //    int posts_done = job.posts_done;
 
@@ -128,27 +130,35 @@ Job JobManager::getJob(int jobID)
 
     Job selectJob;
     while (selectQuery.next()) {
-        selectJob.id = selectQuery.value(rec.indexOf("JobID")).toInt();
-        selectJob.site = selectQuery.value(rec.indexOf("site")).toString();
+        selectJob.setId( selectQuery.value(rec.indexOf("JobID")).toInt() );
+        selectJob.setSite( selectQuery.value(rec.indexOf("site")).toString() );
 
-        selectJob.tags = selectQuery.value(
-                    rec.indexOf("tags")).toString().split(SEP);
+        selectJob.setTags( selectQuery.value(
+                    rec.indexOf("tags")).toString().split(SEP) );
 
-        selectJob.save_path = selectQuery.value(
-                    rec.indexOf("save_path")).toString();
+        selectJob.setSavePath( selectQuery.value(
+                    rec.indexOf("save_path")).toString() );
 
-        selectJob.pic_types = unpack_qset <PicType> (
-                    selectQuery.value(rec.indexOf("pic_types")).toString());
-        selectJob.rating = unpack_qset <PostRating> (
-                    selectQuery.value(rec.indexOf("rating")).toString());
-        selectJob.file_types = unpack_qset <PicFormat> (
-                    selectQuery.value(rec.indexOf("file_types")).toString());
+        selectJob.setPicTypes( unpack_qset <PicType> (
+                    selectQuery.value(rec.indexOf("pic_types")).toString()) );
+        selectJob.setRating( unpack_qset <PostRating> (
+                    selectQuery.value(rec.indexOf("rating")).toString()) );
+        selectJob.setPicFormats( unpack_qset <PicFormat> (
+                    selectQuery.value(rec.indexOf("file_types")).toString()) );
 
-        selectJob.filenames = selectQuery.value(rec.indexOf("filenames")).toString();
-        selectJob.try_max = selectQuery.value(rec.indexOf("try_max")).toInt();
-        selectJob.lastSearchUrl = selectQuery.value(rec.indexOf("last_search_url")).toString();
+        selectJob.setFilenameTemplate( selectQuery.value(
+                                           rec.indexOf("filenames")).toString()
+                                       );
+        selectJob.setTryMax( selectQuery.value(
+                                 rec.indexOf("try_max")).toInt()
+                             );
+        selectJob.setLastSearchUrl(
+                    selectQuery.value(rec.indexOf("last_search_url")).toString()
+                    );
 
-        selectJob.status = (JobStatus)selectQuery.value(rec.indexOf("done")).toInt();
+        selectJob.setStatus(
+                    (JobStatus) selectQuery.value(rec.indexOf("done")).toInt()
+                    );
 
 //        selectJob.done = selectQuery.value(rec.indexOf("done")).toBool();
 //        selectJob.search_done = selectQuery.value(rec.indexOf("search_done")).toBool();
@@ -238,8 +248,8 @@ QList<PostInfo> JobManager::readPosts(int jobID)
     QList<PostInfo> postList;
     while (selectQuery.next()) {
         PostInfo postInfo;
-        postInfo.id = selectQuery.value(rec.indexOf("PostID")).toInt();
-        postInfo.url = selectQuery.value(rec.indexOf("url")).toString();
+        postInfo.setId( selectQuery.value(rec.indexOf("PostID")).toInt() );
+        postInfo.setUrl( selectQuery.value(rec.indexOf("url")).toString() );
 
         postList << postInfo;
     }
@@ -265,8 +275,8 @@ void JobManager::addPics(QList<PicInfo> picList, int jobID)
     QString insertString;
 
     for (int i = 0; i < picList.count(); i++) {
-        QString picUrl = picList.at(i).url;
-        QString picName = picList.at(i).name;
+        QString picUrl = picList.at(i).getUrl();
+        QString picName = picList.at(i).getName();
 
         insertString = insertTemplate.arg(jobID).arg(picUrl).arg(picName);
         insertQuery.exec(insertString);
@@ -297,9 +307,9 @@ QList<PicInfo> JobManager::readPics(int jobID)
     QList<PicInfo> picList;
     while (selectQuery.next()) {
         PicInfo picInfo;
-        picInfo.id = selectQuery.value(rec.indexOf("PicID")).toInt();
-        picInfo.url = selectQuery.value(rec.indexOf("url")).toString();
-        picInfo.name = selectQuery.value(rec.indexOf("filename")).toString();
+        picInfo.setId( selectQuery.value(rec.indexOf("PicID")).toInt() );
+        picInfo.setUrl( selectQuery.value(rec.indexOf("url")).toString() );
+        picInfo.setName( selectQuery.value(rec.indexOf("filename")).toString() );
 
         picList << picInfo;
     }

@@ -32,58 +32,52 @@ void Grabber::startJob(Job currJob)
     cout << currJob << endl;
 
     Parser* parser;
-    cout << "PARSER" << endl;
-    if (currJob.site == "sankaku") {
+    if (currJob.getSite() == "sankaku") {
         parser = new SankakuParser();
         cout << "Sankaku Channel" << endl;
     }
 
-    switch (currJob.status) {
+    switch (currJob.getStatus()) {
     case READY: {
-        QString initialUrl = parser->genQueryUrl(currJob.tags);
+        QString initialUrl = parser->genQueryUrl(currJob.getTags());
 
-        this->jobManager->updSearch(initialUrl, currJob.id);
-        this->jobManager->updStatus(SEARCH_START, currJob.id);
+        this->jobManager->updSearch(initialUrl, currJob.getId());
+        this->jobManager->updStatus(SEARCH_START, currJob.getId());
 
-        currJob.lastSearchUrl = initialUrl;
-        currJob.status = SEARCH_START;
-//        this->searchProcess(initialUrl, parser, currJob.id);
-//        break;
+        currJob.setLastSearchUrl(initialUrl);
+        currJob.setStatus(SEARCH_START);
     }
     case SEARCH_START: {
-        this->searchProcess(currJob.lastSearchUrl, parser, currJob.id);
-//        break;
+        this->searchProcess(currJob.getLastSearchUrl(), parser, currJob.getId());
     }
     case SEARCH_DONE: {
         this->postsProcess(parser, currJob);
-//        break;
     }
     case POSTS_DONE: {
-        this->picsDownload(currJob.id);
-//        break;
+        this->picsDownload(currJob.getId());
     }
     case PICS_DONE: {
         cout << "ALL DONE!" << endl;
-//        break;
     }
     }
     delete parser;
+/*
+    if (!currJob.search_done) {
+        if (currJob.lastSearchUrl == Job::INITIAL_URL) {
+            QString initialUrl = parser->genQueryUrl(currJob.tags);
+            this->jobManager->updSearch(initialUrl, currJob.id);
+            currJob.lastSearchUrl = initialUrl;
+        }
+        this->searchProcess(currJob.lastSearchUrl, parser, currJob.id);
+    }
 
-//    if (!currJob.search_done) {
-//        if (currJob.lastSearchUrl == Job::INITIAL_URL) {
-//            QString initialUrl = parser->genQueryUrl(currJob.tags);
-//            this->jobManager->updSearch(initialUrl, currJob.id);
-//            currJob.lastSearchUrl = initialUrl;
-//        }
-//        this->searchProcess(currJob.lastSearchUrl, parser, currJob.id);
-//    }
+    if (!currJob.posts_done) {
+        this->postsProcess(parser, currJob);
+    }
+    delete parser;
 
-//    if (!currJob.posts_done) {
-//        this->postsProcess(parser, currJob);
-//    }
-//    delete parser;
-
-//    this->picsDownload(currJob.id);
+    this->picsDownload(currJob.id);
+*/
 }
 
 void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
@@ -100,6 +94,7 @@ void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
         QString newSearchUrl = searchInfo.nextPage();
 
         this->jobManager->updSearch(newSearchUrl, jobID);
+
         this->searchProcess(newSearchUrl, parser, jobID);
     }
     else {
@@ -110,43 +105,40 @@ void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
 void Grabber::postsProcess(Parser* parser, Job currJob)
 {
     cout << "POSTS PROCESS" << endl;
-    QList<PostInfo> postList = this->jobManager->readPosts(currJob.id);
+    QList<PostInfo> postList = this->jobManager->readPosts(currJob.getId());
 
     Loader loader;
     for (int i = 0; i < postList.count(); i++) {
-        QString postUrl = postList.at(i).url;
+        QString postUrl = postList.at(i).getUrl();
 
         QString postHtml = loader.loadHtml(postUrl);
         PostInfo postInfo = parser->parsePost(postHtml);
 
 //        cout << postInfo << endl;
 
-//        if (    (currJob.rating.contains(postInfo.rating))
-//                || (currJob.rating.contains(RT_OTHER))
-//            ) {
         if (
-                (currJob.okRating(postInfo.rating)) ||
+                (currJob.okRating(postInfo.getRating())) ||
                 (currJob.okRating(RT_OTHER))
             )
         {
-            QList<PicInfo> picList = postInfo.pics;
+            QList<PicInfo> picList = postInfo.getPics();
             QList<PicInfo> okList;
             for (int j = 0; j < picList.count(); j++) {
                 PicInfo picInfo = picList.at(j);
                 if (
-                        (currJob.okType(picInfo.type)) &&
-                        (currJob.okFormat(picInfo.format))
+                        ( currJob.okType(picInfo.getType()) ) &&
+                        ( currJob.okFormat(picInfo.getFormat()) )
                     )
                 {
                     //name?
                     okList << picInfo;
                 }
             }
-            this->jobManager->addPics(okList, currJob.id);
-            this->jobManager->postDone(postList.at(i).id);
+            this->jobManager->addPics(okList, currJob.getId());
+            this->jobManager->postDone(postList.at(i).getId());
         }
     }
-    this->jobManager->updStatus(POSTS_DONE, currJob.id);
+    this->jobManager->updStatus(POSTS_DONE, currJob.getId());
     cout << "POSTS FINISH" << endl;
 }
 
@@ -159,11 +151,11 @@ void Grabber::picsDownload(int jobID)
         PicInfo picInfo = picList.at(i);
 
         cout << "LOAD #" << i+1 << endl;
-        cout << picInfo.name.toStdString() << endl;
-        cout << picInfo.url.toStdString() << endl;
+        cout << picInfo.getName().toStdString() << endl;
+        cout << picInfo.getName().toStdString() << endl;
 
-        loader.loadFile(picInfo.url, picInfo.name);
-        this->jobManager->picDone(picInfo.id);
+        loader.loadFile(picInfo.getUrl(), picInfo.getName());
+        this->jobManager->picDone(picInfo.getId());
     }
     this->jobManager->updStatus(PICS_DONE, jobID);
     cout << "DOWNLOAD COMPLETE" << endl;

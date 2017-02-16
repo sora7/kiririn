@@ -21,6 +21,8 @@ public:
     JobManager();
     ~JobManager();
 
+    static const QString DB_PATH;
+
     QSqlTableModel* jobModel();
 
     void addJob(Job job);
@@ -30,23 +32,21 @@ public:
     //search
     void updSearch(QString searchUrl, int jobID);
     void addPosts(QStringList postUrls, int jobID);
-
     void updStatus(JobStatus jobStatus, int jobID);
 
-//    void searchDone(int jobID);
     //posts
     QList<PostInfo> readPosts(int jobID);
     void postDone(int postID);
     void addPics(QList<PicInfo> picList, int jobID);
     void postsDone(int jobID);
+
     //pics
     QList<PicInfo> readPics(int jobID);
     void picDone(int picID);
     void picsDone(int jobID);
 
 private:
-    QSqlDatabase job_db;
-
+    QSqlDatabase _job_db;
     QSqlTableModel *_jobModel;
 
     void checkTables();

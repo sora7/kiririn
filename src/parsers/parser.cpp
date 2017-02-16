@@ -74,8 +74,8 @@ PostInfo Parser::parsePost(QString htmlText)
 {
     PostInfo postInfo;
 
-    postInfo.rating = getRating(htmlText);
-    postInfo.pics = getPics(htmlText);
+    postInfo.setRating( getRating(htmlText) );
+    postInfo.setPics( getPics(htmlText) );
 
     return postInfo;
 }

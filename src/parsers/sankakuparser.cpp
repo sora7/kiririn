@@ -76,12 +76,12 @@ QList<PicInfo> SankakuParser::getPics(QString htmlText)
         QString origSize = rxOrig.cap(5);
 
         PicInfo picInfo;
-        picInfo.type   = ORIGINAL;
-        picInfo.name   = origName;
-        picInfo.format = checkFormat( origExt );
-        picInfo.url    = "https:" + origUrl;
-        picInfo.size   = origSize;
-        picInfo.res    = origRes;
+        picInfo.setType(ORIGINAL);
+        picInfo.setName(origName);
+        picInfo.setFormat( checkFormat( origExt ) );
+        picInfo.setUrl( "https:" + origUrl );
+//        picInfo.size   = origSize;
+//        picInfo.res    = origRes;
 
         pics << picInfo;
 //        cout << picInfo << endl;;
@@ -101,11 +101,12 @@ QList<PicInfo> SankakuParser::getPics(QString htmlText)
         QString resRes  = rxResize.cap(4);
 
         PicInfo picInfo2;
-        picInfo2.type   = RESIZED;
-        picInfo2.name   = resName;
-        picInfo2.format = checkFormat( resExt );
-        picInfo2.url    = "https:" + resUrl;
-        picInfo2.res    = resRes;
+        picInfo2.setType(RESIZED);
+        picInfo2.setName(resName);
+        picInfo2.setFormat( checkFormat( resExt ) );
+        picInfo2.setUrl( "https:" + resUrl );
+
+//        picInfo2.res    = resRes;
 
         pics << picInfo2;
     }
@@ -114,8 +115,6 @@ QList<PicInfo> SankakuParser::getPics(QString htmlText)
 
 PostRating SankakuParser::getRating(QString htmlText)
 {
-    PostRating rating;
-
 //    <li>Rating: Safe</li>
 //    <li>Rating: Questionable</li>
 //    <li>Rating: Explicit</li>
@@ -124,14 +123,14 @@ PostRating SankakuParser::getRating(QString htmlText)
     int pos = rxRating.indexIn(htmlText);
     if (pos > -1) {
         if (rxRating.cap(1) == "Safe"){
-            rating = SAFE;
+            return SAFE;
         }
         if (rxRating.cap(1) == "Questionable"){
-            rating = QUESTIONABLE;
+            return QUESTIONABLE;
         }
         if (rxRating.cap(1) == "Explicit"){
-            rating = EXPLICIT;
+            return EXPLICIT;
         }
     }
-    return rating;
+    return RT_OTHER;
 }

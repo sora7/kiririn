@@ -8,6 +8,7 @@ using namespace std;
 #include "loader.h"
 #include "parsers/parser.h"
 #include "parsers/sankakuparser.h"
+
 #include "jobmanager.h"
 
 class Grabber

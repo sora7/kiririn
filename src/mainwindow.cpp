@@ -48,29 +48,31 @@ Job MainWindow::getJobSettings()
 {
     Job job;
 
-    job.site = ui->comboBox_site->itemData(ui->comboBox_site->currentIndex()).toString();
-    job.tags = ui->lineEdit_tags->text().split(" ");
-    job.save_path = ui->lineEdit_savepath->text();
+    job.setSite(ui->comboBox_site->itemData(
+                    ui->comboBox_site->currentIndex()).toString()
+                );
+    job.setTags(ui->lineEdit_tags->text().split(" "));
+    job.setSavePath(ui->lineEdit_savepath->text());
 
     if (ui->checkBox_rt_safe->isChecked()) {
-        job.rating << SAFE;
+        job.addRating(SAFE);
     }
     if (ui->checkBox_rt_questionable->isChecked()) {
-        job.rating << QUESTIONABLE;
+        job.addRating(QUESTIONABLE);
     }
     if (ui->checkBox_rt_explicit->isChecked()) {
-        job.rating << EXPLICIT;
+        job.addRating(EXPLICIT);
     }
     if (ui->checkBox_rt_OTHER->isChecked()) {
-        job.rating << RT_OTHER;
+        job.addRating(RT_OTHER);
     }
 
     if (ui->checkBox_pt_original->isChecked()) {
-        job.pic_types << ORIGINAL;
+        job.addType(ORIGINAL);
     }
 
     if (ui->checkBox_pt_resized->isChecked()) {
-        job.pic_types << RESIZED;
+        job.addType(RESIZED);
     }
 
 

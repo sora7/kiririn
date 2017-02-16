@@ -10,12 +10,6 @@
 
 using namespace std;
 
-namespace post_rating {
-    const int SAFE = 1;
-    const int QUESTIONABLE = 2;
-    const int EXPLICIT = 3;
-}
-
 enum PostRating {
     SAFE,
     QUESTIONABLE,
@@ -33,12 +27,21 @@ public:
 
     static string to_str(PostRating postRating);
 
-    int id;
-    QString url;
+    PostRating getRating() const;
+    void setRating(const PostRating &value);
+    QList<PicInfo> getPics() const;
+    void setPics(const QList<PicInfo> &value);
+    QString getUrl() const;
+    void setUrl(const QString &value);
+    int getId() const;
+    void setId(int value);
 
+private:
+    int _id;
+    QString _url;
 
-    PostRating rating;
-    QList<PicInfo> pics;
+    PostRating _rating;
+    QList<PicInfo> _pics;
 };
 
 #endif // POSTINFO_H
