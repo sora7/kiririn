@@ -8,6 +8,8 @@ using namespace std;
 #include "loader.h"
 #include "parsers/parser.h"
 #include "parsers/sankakuparser.h"
+#include "parsers/mishimmieparser.h"
+#include "parsers/fourchanhouseparser.h"
 
 #include "jobmanager.h"
 

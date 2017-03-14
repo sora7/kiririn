@@ -9,6 +9,9 @@ BooruTest::BooruTest(QString booru)
     if (booru == "katawa") {
         this->parser = new MishimmieParser();
     }
+    if (booru == "4chan") {
+        this->parser = new FourChanHouseParser();
+    }
 }
 
 BooruTest::~BooruTest()

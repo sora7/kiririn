@@ -50,27 +50,22 @@ QStringList MishimmieParser::getPosts(QString htmlText)
 
     postsList = findall(htmlText, post_regex, 0, prefix);
 
-
-
     return postsList;
 }
 
 QList<PicInfo> MishimmieParser::getPics(QString htmlText)
 {
     QList<PicInfo> pics;
-//    QRegExp rxExt = "";
 
     QRegExp rxOrig("<img id='main_image' src='(http://shimmie.katawa-shoujo.com"
                    "/image/([0-9]*.([a-z0-9]{3,4})))'></div>");
-    rxOrig.setMinimal(true);//lazy quantifiers, qt you suck
+    rxOrig.setMinimal(true);
 
     int pos = rxOrig.indexIn(htmlText);
     if (pos > -1) {
         QString origUrl  = rxOrig.cap(1);
         QString origName = rxOrig.cap(2);
         QString origExt  = rxOrig.cap(3);
-//        QString origRes  = rxOrig.cap(4);
-//        QString origSize = rxOrig.cap(5);
 
         PicInfo picInfo;
         picInfo.setType(ORIGINAL);
@@ -86,9 +81,4 @@ QList<PicInfo> MishimmieParser::getPics(QString htmlText)
     }
 
     return pics;
-}
-
-PostRating MishimmieParser::getRating(QString htmlText)
-{
-    return RT_OTHER;
 }

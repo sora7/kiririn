@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     items/picinfo.cpp \
     items/postinfo.cpp \
     parsers/mishimmieparser.cpp \
-    boorutest.cpp
+    boorutest.cpp \
+    parsers/fourchanhouseparser.cpp \
+    parsers/shimmieparser.cpp
 
 HEADERS  += mainwindow.h \
     loader.h \
@@ -35,7 +37,9 @@ HEADERS  += mainwindow.h \
     items/postinfo.h \
     items/picinfo.h \
     parsers/mishimmieparser.h \
-    boorutest.h
+    boorutest.h \
+    parsers/fourchanhouseparser.h \
+    parsers/shimmieparser.h
 
 FORMS    += mainwindow.ui
 

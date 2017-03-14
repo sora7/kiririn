@@ -1,16 +1,15 @@
-#ifndef MISHIMMIEPARSER_H
-#define MISHIMMIEPARSER_H
+#ifndef FOURCHANHOUSEPARSER_H
+#define FOURCHANHOUSEPARSER_H
 
 #include "parsers/shimmieparser.h"
 
-class MishimmieParser : public ShimmieParser
+class FourChanHouseParser : public ShimmieParser
 {
 public:
-    MishimmieParser();
-    ~MishimmieParser();
+    FourChanHouseParser();
+    ~FourChanHouseParser();
 
     QString genQueryUrl(QStringList tags);
-
 private:
     QString getNextPage(QString htmlText);
     QStringList getPosts(QString htmlText);
@@ -18,4 +17,4 @@ private:
     QList<PicInfo> getPics(QString htmlText);
 };
 
-#endif // MISHIMMIEPARSER_H
+#endif // FOURCHANHOUSEPARSER_H

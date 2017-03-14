@@ -11,11 +11,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->comboBox_site->addItem("Sankaku Channel", QVariant("sankaku"));
-    ui->comboBox_site->addItem("Konachan", QVariant("konachan"));
-    ui->comboBox_site->addItem("Yande.re", QVariant("yande.re"));
-    ui->comboBox_site->addItem("Safebooru", QVariant("safebooru"));
-    ui->comboBox_site->addItem("Danbooru", QVariant("danbooru"));
+    ui->comboBox_site->addItem("Sankaku Channel",   QVariant("sankaku"));
+    ui->comboBox_site->addItem("Mishimmie",         QVariant("katawa"));
+    ui->comboBox_site->addItem("4chan House",       QVariant("fourchanhouse"));
+
+//    ui->comboBox_site->addItem("Konachan", QVariant("konachan"));
+//    ui->comboBox_site->addItem("Yande.re", QVariant("yande.re"));
+//    ui->comboBox_site->addItem("Safebooru", QVariant("safebooru"));
+//    ui->comboBox_site->addItem("Danbooru", QVariant("danbooru"));
 
     ui->tableView_job->setModel(this->grabber.jobModel());
     ui->tableView_job->verticalHeader()->hide();
@@ -110,7 +113,7 @@ void MainWindow::bindHandlers()
 
 void MainWindow::test()
 {
-    BooruTest tester("katawa");
+    BooruTest tester("4chan");
 
     QString url;
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3844";
@@ -121,9 +124,17 @@ void MainWindow::test()
 
 //    url = "https://chan.sankakucomplex.com/?next=3823616&amp;tags=patema&amp;page=2";
 //    url = "https://chan.sankakucomplex.com/post/show/5034106";
-//    tester.load("post", url);
+//    url = "https://shimmie.4chanhouse.org/index.php?q=/post/list/jp/1";
+//    url = "https://shimmie.4chanhouse.org/index.php?q=/post/view/5775&search=jp";
+//    url = "https://shimmie.4chanhouse.org/index.php?q=/post/view/5782&search=jp";
+//    url = "https://shimmie.4chanhouse.org/index.php?q=/post/view/5717&search=jp";
+//    url = "https://shimmie.4chanhouse.org/index.php?q=/post/list/a/19";
+//    tester.load("search", url);
+//    url = "https://shimmie.4chanhouse.org/index.php?q=/post/list/a/7";
+//    tester.load("search", url);
+//    url = "https://shimmie.4chanhouse.org/index.php?q=/post/list/conrad%20jp/1";
+//    tester.load("search", url);
 
-
-    tester.test("search", 3);
-    tester.test("post");
+//    tester.test("post");
+    tester.test("search");
 }
