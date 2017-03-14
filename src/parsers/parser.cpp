@@ -84,6 +84,7 @@ QStringList Parser::findall(QString text, QString regex, int pos_shift, QString 
 {
     QStringList result;
     QRegExp rx(regex);
+    rx.setMinimal(true);
 
     int i = 0;
 

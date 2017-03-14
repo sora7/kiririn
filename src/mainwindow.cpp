@@ -3,6 +3,8 @@
 
 #include <fstream>
 
+#include "boorutest.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -108,26 +110,20 @@ void MainWindow::bindHandlers()
 
 void MainWindow::test()
 {
-        cout << "Fuck you asshole!" << endl;
-        Loader loader;
-        loader.loadFile("https://chan.sankakucomplex.com/?next=3823616&amp;tags=patema&amp;page=2", "search2.html");
-        loader.loadFile("https://cs.sankakucomplex.com/data/sample/e3/75/sample-e3750e103c4680fed3d1ee9eb8714cc9.jpg?3773378", "dera.jpg");
-        loader.loadFile("https://chan.sankakucomplex.com/post/show/5034106","post_jpg[0]-r-s.html");
+    BooruTest tester("katawa");
 
-        QStringList tags;
-        tags << "onodera_kosaki";
-        tags << "nisekoi";
-        tags << "screen_capture";
+    QString url;
+//    url = "https://shimmie.katawa-shoujo.com/post/view/3844";
+//    url = "https://shimmie.katawa-shoujo.com/post/view/3975?search=hanako";
+//    url = "https://shimmie.katawa-shoujo.com/post/list/hanako/1";
+//    url = "https://shimmie.katawa-shoujo.com/post/list/shizune/1";
+//    url = "https://shimmie.katawa-shoujo.com/post/list/hanako/105";
+
+//    url = "https://chan.sankakucomplex.com/?next=3823616&amp;tags=patema&amp;page=2";
+//    url = "https://chan.sankakucomplex.com/post/show/5034106";
+//    tester.load("post", url);
 
 
-
-        SankakuParser parser;
-
-        cout << parser.genQueryUrl(tags).toStdString() << endl;
-
-        SearchInfo sinfo =  parser.parseSearch(Parser::readFile("search2.html"));
-        cout << sinfo << endl;
-//        PostInfo postInfo =  parser.parsePost(Parser::readFile("post_jpg[0]-r-s.html"));
-        PostInfo postInfo =  parser.parsePost(Parser::readFile("post.html"));
-        cout << postInfo << endl;
+    tester.test("search", 3);
+    tester.test("post");
 }

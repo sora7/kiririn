@@ -1,13 +1,13 @@
-#ifndef SANKAKUPARSER_H
-#define SANKAKUPARSER_H
+#ifndef MISHIMMIEPARSER_H
+#define MISHIMMIEPARSER_H
 
 #include "parsers/parser.h"
 
-class SankakuParser : public Parser
+class MishimmieParser : public Parser
 {
 public:
-    SankakuParser();
-    ~SankakuParser();
+    MishimmieParser();
+    ~MishimmieParser();
 
     QString genQueryUrl(QStringList tags);
 
@@ -19,4 +19,4 @@ private:
     PostRating getRating(QString htmlText);
 };
 
-#endif // SANKAKUPARSER_H
+#endif // MISHIMMIEPARSER_H

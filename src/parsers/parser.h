@@ -3,6 +3,9 @@
 
 #include <QFile>
 
+#include <QRegExp>
+#include <QStringList>
+
 #include "items/postinfo.h"
 #include "items/searchinfo.h"
 
@@ -38,14 +41,14 @@ protected:
     Liste:
 
     Danbooru-alike:
-        SankakuChannel  *
+        SankakuChannel *
         Konachan
         Yande.re
         Safebooru
         Danbooru
         Gelbooru
     Shimmie-alike:
-        Mishimmie
+        Mishimmie      ?
         4chanhouse
     Other:
         favim.ru

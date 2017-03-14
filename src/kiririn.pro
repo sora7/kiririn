@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     items/job.cpp \
     jobmanager.cpp \
     items/picinfo.cpp \
-    items/postinfo.cpp
+    items/postinfo.cpp \
+    parsers/mishimmieparser.cpp \
+    boorutest.cpp
 
 HEADERS  += mainwindow.h \
     loader.h \
@@ -31,7 +33,9 @@ HEADERS  += mainwindow.h \
     items/job.h \
     jobmanager.h \
     items/postinfo.h \
-    items/picinfo.h
+    items/picinfo.h \
+    parsers/mishimmieparser.h \
+    boorutest.h
 
 FORMS    += mainwindow.ui
 

@@ -23,7 +23,7 @@ string PostInfo::to_str(PostRating postRating)
             return "explicit";
         }
         case RT_OTHER: {
-            return "all";
+            return "other";
         }
     }
     return "";
