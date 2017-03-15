@@ -36,15 +36,18 @@ void Grabber::startJob(Job currJob)
         parser = new SankakuParser();
         cout << "Sankaku Channel" << endl;
     }
+    if (currJob.getSite() == "idol") {
+        parser = new IdolComplexParser();
+        cout << "Idol Complex" << endl;
+    }
     if (currJob.getSite() == "katawa") {
         parser = new MishimmieParser();
         cout << "Mishimmie" << endl;
     }
-    if (currJob.getSite() == "fourchanhouse") {
+    if (currJob.getSite() == "4chan") {
         parser = new FourChanHouseParser();
         cout << "4chan House" << endl;
     }
-
 
     switch (currJob.getStatus()) {
     case READY: {

@@ -12,6 +12,9 @@ BooruTest::BooruTest(QString booru)
     if (booru == "4chan") {
         this->parser = new FourChanHouseParser();
     }
+    if (booru == "idol") {
+        this->parser = new IdolComplexParser();
+    }
 }
 
 BooruTest::~BooruTest()

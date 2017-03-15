@@ -6,6 +6,7 @@
 #include "parsers/sankakuparser.h"
 #include "parsers/mishimmieparser.h"
 #include "parsers/fourchanhouseparser.h"
+#include "parsers/idolcomplexparser.h"
 
 class BooruTest
 {

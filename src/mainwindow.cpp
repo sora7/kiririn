@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <fstream>
+//#include <fstream>
 
 #include "boorutest.h"
 
@@ -12,8 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->comboBox_site->addItem("Sankaku Channel",   QVariant("sankaku"));
+    ui->comboBox_site->addItem("Idol Complex",      QVariant("idol"));
     ui->comboBox_site->addItem("Mishimmie",         QVariant("katawa"));
-    ui->comboBox_site->addItem("4chan House",       QVariant("fourchanhouse"));
+    ui->comboBox_site->addItem("4chan House",       QVariant("4chan"));
 
 //    ui->comboBox_site->addItem("Konachan", QVariant("konachan"));
 //    ui->comboBox_site->addItem("Yande.re", QVariant("yande.re"));
@@ -113,7 +114,7 @@ void MainWindow::bindHandlers()
 
 void MainWindow::test()
 {
-    BooruTest tester("4chan");
+    BooruTest tester("idol");
 
     QString url;
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3844";
@@ -129,12 +130,16 @@ void MainWindow::test()
 //    url = "https://shimmie.4chanhouse.org/index.php?q=/post/view/5782&search=jp";
 //    url = "https://shimmie.4chanhouse.org/index.php?q=/post/view/5717&search=jp";
 //    url = "https://shimmie.4chanhouse.org/index.php?q=/post/list/a/19";
-//    tester.load("search", url);
 //    url = "https://shimmie.4chanhouse.org/index.php?q=/post/list/a/7";
-//    tester.load("search", url);
 //    url = "https://shimmie.4chanhouse.org/index.php?q=/post/list/conrad%20jp/1";
-//    tester.load("search", url);
+//    url = "https://idol.sankakucomplex.com/?tags=shameimaru_aya+amatsuka_miyu+camera&commit=Search";
+//    url = "https://idol.sankakucomplex.com/?tags=misaka_mikoto+shirai_kuroko&commit=Search";
+//    url = "https://idol.sankakucomplex.com/?tags=shirai_kuroko+kanda_midori&commit=Search";
+//    url = "https://idol.sankakucomplex.com/post/show/446785";
+//    url = "https://idol.sankakucomplex.com/post/show/663736";
+//    url = "https://idol.sankakucomplex.com/post/show/294891";
 
-//    tester.test("post");
+
     tester.test("search");
+    tester.test("post");
 }

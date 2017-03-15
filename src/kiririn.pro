@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     parsers/mishimmieparser.cpp \
     boorutest.cpp \
     parsers/fourchanhouseparser.cpp \
-    parsers/shimmieparser.cpp
+    parsers/shimmieparser.cpp \
+    parsers/idolcomplexparser.cpp
 
 HEADERS  += mainwindow.h \
     loader.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     parsers/mishimmieparser.h \
     boorutest.h \
     parsers/fourchanhouseparser.h \
-    parsers/shimmieparser.h
+    parsers/shimmieparser.h \
+    parsers/idolcomplexparser.h
 
 FORMS    += mainwindow.ui
 

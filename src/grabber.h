@@ -10,6 +10,7 @@ using namespace std;
 #include "parsers/sankakuparser.h"
 #include "parsers/mishimmieparser.h"
 #include "parsers/fourchanhouseparser.h"
+#include "parsers/idolcomplexparser.h"
 
 #include "jobmanager.h"
 
