@@ -48,6 +48,10 @@ void Grabber::startJob(Job currJob)
         parser = new FourChanHouseParser();
         cout << "4chan House" << endl;
     }
+    if (currJob.getSite() == "konachan") {
+        parser = new KonachanParser();
+        cout << "Konachan" << endl;
+    }
 
     switch (currJob.getStatus()) {
     case READY: {

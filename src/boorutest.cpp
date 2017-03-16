@@ -15,6 +15,9 @@ BooruTest::BooruTest(QString booru)
     if (booru == "idol") {
         this->parser = new IdolComplexParser();
     }
+    if (booru == "konachan") {
+        this->parser = new KonachanParser();
+    }
 }
 
 BooruTest::~BooruTest()

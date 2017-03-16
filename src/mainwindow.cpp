@@ -13,10 +13,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->comboBox_site->addItem("Sankaku Channel",   QVariant("sankaku"));
     ui->comboBox_site->addItem("Idol Complex",      QVariant("idol"));
+    ui->comboBox_site->addItem("Konachan",          QVariant("konachan"));
     ui->comboBox_site->addItem("Mishimmie",         QVariant("katawa"));
     ui->comboBox_site->addItem("4chan House",       QVariant("4chan"));
 
-//    ui->comboBox_site->addItem("Konachan", QVariant("konachan"));
 //    ui->comboBox_site->addItem("Yande.re", QVariant("yande.re"));
 //    ui->comboBox_site->addItem("Safebooru", QVariant("safebooru"));
 //    ui->comboBox_site->addItem("Danbooru", QVariant("danbooru"));
@@ -114,7 +114,7 @@ void MainWindow::bindHandlers()
 
 void MainWindow::test()
 {
-    BooruTest tester("idol");
+    BooruTest tester("konachan");
 
     QString url;
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3844";
@@ -138,7 +138,15 @@ void MainWindow::test()
 //    url = "https://idol.sankakucomplex.com/post/show/446785";
 //    url = "https://idol.sankakucomplex.com/post/show/663736";
 //    url = "https://idol.sankakucomplex.com/post/show/294891";
-
+//    url = "https://konachan.com/post/show/238330/hatsune_miku-long_hair-re-rin-twintails-vocaloid";
+//    url = "https://konachan.com/post/show/206617/baseball-black_hair-blue_eyes-brown_hair-hikigaya_";
+//    url = "https://konachan.com/post/show/215099/brown_hair-cropped-hikigaya_hachiman-kiss-long_hai";
+//    url = "https://konachan.com/post/show/200176/black_eyes-black_hair-blush-book-drink-hikigaya_ha";
+//    url = "https://konachan.com/post/show/234649/blush-close-gradient-hikigaya_komachi-short_hair-t";
+//    url = "https://konachan.com/post?tags=yuigahama_yui";
+//    url = "https://konachan.com/post?page=3&tags=yukinoshita_yukino";
+//    url = "https://konachan.com/post?tags=atomix";
+//    url = "https://konachan.com/post?tags=alice_%28wonderland%29";
 
     tester.test("search");
     tester.test("post");
