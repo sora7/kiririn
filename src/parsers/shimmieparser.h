@@ -1,15 +1,18 @@
 #ifndef SHIMMIEPARSER_H
 #define SHIMMIEPARSER_H
 
-#include "parsers/parser.h"
+#include "parsers/booruparser.h"
 
-class ShimmieParser : public Parser
+//mishimmie
+//4chan house
+class ShimmieParser : public BooruParser
 {
 public:
     ShimmieParser();
     ~ShimmieParser();
 private:
     PostRating getRating(QString htmlText);
+    QList<PicInfo> getPics(QString htmlText);
 };
 
 #endif // SHIMMIEPARSER_H

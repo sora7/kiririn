@@ -8,8 +8,8 @@
 using namespace std;
 
 #include "loader.h"
-#include "parsers/parser.h"
-#include "parsers/sankakuparser.h"
+#include "parsers/booruparser.h"
+#include "parsers/sankakuchannelparser.h"
 #include "parsers/mishimmieparser.h"
 #include "parsers/fourchanhouseparser.h"
 #include "parsers/idolcomplexparser.h"
@@ -44,8 +44,8 @@ private:
 
     void startJob(Job currJob);
 
-    void searchProcess(QString searchUrl, Parser* parser, int jobID);
-    void postsProcess(Parser *parser, Job currJob);
+    void searchProcess(QString searchUrl, BooruParser* parser, int jobID);
+    void postsProcess(BooruParser *parser, Job currJob);
     void picsDownload(int jobID);
 };
 

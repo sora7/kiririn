@@ -3,7 +3,7 @@
 
 
 #include "loader.h"
-#include "parsers/sankakuparser.h"
+#include "parsers/sankakuchannelparser.h"
 #include "parsers/mishimmieparser.h"
 #include "parsers/fourchanhouseparser.h"
 #include "parsers/idolcomplexparser.h"
@@ -23,7 +23,7 @@ public:
     void testing();
 private:
     QString _booru;
-    Parser* parser;
+    BooruParser* parser;
 
     QString testFilename(QString type, int datasetN);
 };

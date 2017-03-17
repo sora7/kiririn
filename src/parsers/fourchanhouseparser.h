@@ -15,15 +15,6 @@ public:
     ~FourChanHouseParser();
 
     QString name();
-    static QString fullname();
-    static QString shortname();
-
-    QString genQueryUrl(QStringList tags);
-private:
-    QString getNextPage(QString htmlText);
-    QStringList getPosts(QString htmlText);
-
-    QList<PicInfo> getPics(QString htmlText);
 };
 
 #endif // FOURCHANHOUSEPARSER_H

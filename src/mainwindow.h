@@ -5,7 +5,6 @@
 
 #include "loader.h"
 #include "grabber.h"
-#include "parsers/sankakuparser.h"
 #include "items/job.h"
 
 #include <QMainWindow>

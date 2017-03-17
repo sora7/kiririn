@@ -1,29 +1,20 @@
 #ifndef KONACHANPARSER_H
 #define KONACHANPARSER_H
 
-#include "parsers/parser.h"
+#include "parsers/booruparser.h"
 
 namespace konachan {
     const QString fullname = "Konachan";
     const QString shortname = "konachan";
 }
 
-class KonachanParser : public Parser
+class KonachanParser : public BooruParser
 {
 public:
     KonachanParser();
     ~KonachanParser();
 
     QString name();
-
-    QString genQueryUrl(QStringList tags);
-
-private:
-    QString getNextPage(QString htmlText);
-    QStringList getPosts(QString htmlText);
-
-    QList<PicInfo> getPics(QString htmlText);
-    PostRating getRating(QString htmlText);
 };
 
 #endif // KONACHANPARSER_H

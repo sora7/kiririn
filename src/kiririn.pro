@@ -14,36 +14,38 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     loader.cpp \
     items/searchinfo.cpp \
-    parsers/sankakuparser.cpp \
-    parsers/parser.cpp \
+    boorutest.cpp \
     grabber.cpp \
     items/job.cpp \
     jobmanager.cpp \
     items/picinfo.cpp \
     items/postinfo.cpp \
+    parsers/sankakuparser.cpp \
     parsers/mishimmieparser.cpp \
-    boorutest.cpp \
     parsers/fourchanhouseparser.cpp \
     parsers/shimmieparser.cpp \
     parsers/idolcomplexparser.cpp \
-    parsers/konachanparser.cpp
+    parsers/konachanparser.cpp \
+    parsers/sankakuchannelparser.cpp \
+    parsers/booruparser.cpp
 
 HEADERS  += mainwindow.h \
     loader.h \
     items/searchinfo.h \
-    parsers/sankakuparser.h \
-    parsers/parser.h \
     grabber.h \
     items/job.h \
     jobmanager.h \
     items/postinfo.h \
     items/picinfo.h \
-    parsers/mishimmieparser.h \
     boorutest.h \
+    parsers/sankakuparser.h \
+    parsers/mishimmieparser.h \
     parsers/fourchanhouseparser.h \
     parsers/shimmieparser.h \
     parsers/idolcomplexparser.h \
-    parsers/konachanparser.h
+    parsers/konachanparser.h \
+    parsers/sankakuchannelparser.h \
+    parsers/booruparser.h
 
 FORMS    += mainwindow.ui
 

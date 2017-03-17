@@ -32,9 +32,9 @@ void Grabber::startJob(Job currJob)
 {
     cout << currJob << endl;
     emit logMessage("Job start");
-    Parser* parser;
+    BooruParser* parser;
     if (currJob.getSite() == sankaku::shortname) {
-        parser = new SankakuParser();
+        parser = new SankakuChannelParser();
     }
     if (currJob.getSite() == idol::shortname) {
         parser = new IdolComplexParser();
@@ -96,7 +96,7 @@ void Grabber::startJob(Job currJob)
 */
 }
 
-void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
+void Grabber::searchProcess(QString searchUrl, BooruParser *parser, int jobID)
 {
     cout << "SEARCH PROCESS\tURL: " << searchUrl.toStdString() << endl;
     emit logMessage("Search url: " + searchUrl);
@@ -123,7 +123,7 @@ void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
     }
 }
 
-void Grabber::postsProcess(Parser* parser, Job currJob)
+void Grabber::postsProcess(BooruParser* parser, Job currJob)
 {
     cout << "POSTS PROCESS" << endl;
     emit logMessage("Post processing start");
@@ -139,7 +139,7 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
 
         QString postHtml = loader.loadHtml(postUrl);
         PostInfo postInfo = parser->parsePost(postHtml);
-//        cout << postInfo << endl;
+        cout << postInfo << endl;
         if (
                 (currJob.okRating(postInfo.getRating())) ||
                 (currJob.okRating(RT_OTHER))
@@ -184,7 +184,7 @@ void Grabber::picsDownload(int jobID)
         emit logMessage("Download pic #" + QString::number(i+1));
 
         cout << picInfo.getName().toStdString() << endl;
-        cout << picInfo.getName().toStdString() << endl;
+        cout << picInfo.getUrl().toStdString() << endl;
 
         loader.loadFile(picInfo.getUrl(), picInfo.getName());
         this->jobManager->picDone(picInfo.getId());

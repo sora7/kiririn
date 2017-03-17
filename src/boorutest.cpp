@@ -34,11 +34,11 @@ void BooruTest::test(QString type, int datasetN)
         cout << "Dataset #" << datasetN << endl;
         QString fname = testFilename(type, datasetN);
         if (type == "search") {
-            SearchInfo sinfo =  parser->parseSearch(Parser::readFile(fname));
+            SearchInfo sinfo =  parser->parseSearch(BooruParser::readFile(fname));
             cout << sinfo << endl;
         }
         else {
-            PostInfo pinfo =  parser->parsePost(Parser::readFile(fname));
+            PostInfo pinfo =  parser->parsePost(BooruParser::readFile(fname));
             cout << pinfo << endl;
         }
     }
@@ -46,7 +46,7 @@ void BooruTest::test(QString type, int datasetN)
 
 void BooruTest::testing()
 {
-    setBooru("konachan");
+    setBooru("katawa");
     QString url;
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3844";
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3975?search=hanako";
@@ -79,7 +79,7 @@ void BooruTest::testing()
 //    url = "https://konachan.com/post?tags=atomix";
 //    url = "https://konachan.com/post?tags=alice_%28wonderland%29";
 
-    load("search", url);
+//    load("search", url);
     test("search");
     test("post");
 }
@@ -88,7 +88,7 @@ void BooruTest::setBooru(QString shortname)
 {
     this->_booru = shortname;
     if (shortname == sankaku::shortname) {
-        parser = new SankakuParser();
+        parser = new SankakuChannelParser();
     }
     if (shortname == idol::shortname) {
         parser = new IdolComplexParser();
