@@ -12,18 +12,20 @@
 class BooruTest
 {
 public:
-    BooruTest(QString booru);
+    BooruTest();
     ~BooruTest();
 
+    void setBooru(QString shortname);
     void load(QString type, QString url);
-
 //    dataset == 0: test all datasets
     void test(QString type, int datasetN=0);
+
+    void testing();
 private:
     QString _booru;
     Parser* parser;
 
-    QString datasetFilename(QString type, int datasetN);
+    QString testFilename(QString type, int datasetN);
 };
 
 #endif // BOORUTEST_H
