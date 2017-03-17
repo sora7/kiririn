@@ -54,6 +54,9 @@ void Grabber::startJob(Job currJob)
     if (currJob.getSite() == danbooru::shortname) {
         parser = new DanbooruParser();
     }
+    if (currJob.getSite() == gelbooru::shortname) {
+        parser = new GelbooruParser();
+    }
     cout << parser->name().toStdString() << endl;
     emit logMessage("Site: " + parser->name());
 

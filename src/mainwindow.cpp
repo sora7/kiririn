@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
                                QVariant(yandere::shortname));
     ui->comboBox_site->addItem(danbooru::fullname,
                                QVariant(danbooru::shortname));
+    ui->comboBox_site->addItem(gelbooru::fullname,
+                               QVariant(gelbooru::shortname));
     ui->comboBox_site->addItem(katawa::fullname,
                                QVariant(katawa::shortname));
     ui->comboBox_site->addItem(fourchan::fullname,
@@ -32,9 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->comboBox_site->addItem("4chan House",       QVariant("4chan"));
 //    ui->comboBox_site->addItem("Yande.re",          QVariant("yande.re"));
 //    ui->comboBox_site->addItem("Danbooru",          QVariant("danbooru"));
+//    ui->comboBox_site->addItem("Gelbooru",          QVariant("gelbooru"));
 
 //    ui->comboBox_site->addItem("Safebooru",         QVariant("safebooru"));
-//    ui->comboBox_site->addItem("Gelbooru",          QVariant("gelbooru"));
+
 
     ui->tableView_job->setModel(this->grabber.jobModel());
     ui->tableView_job->verticalHeader()->hide();

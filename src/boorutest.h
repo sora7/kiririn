@@ -10,6 +10,7 @@
 #include "parsers/konachanparser.h"
 #include "parsers/yandereparser.h"
 #include "parsers/danbooruparser.h"
+#include "parsers/gelbooruparser.h"
 
 class BooruTest
 {

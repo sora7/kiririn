@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     parsers/sankakuchannelparser.cpp \
     parsers/booruparser.cpp \
     parsers/yandereparser.cpp \
-    parsers/danbooruparser.cpp
+    parsers/danbooruparser.cpp \
+    parsers/gelbooruparser.cpp
 
 HEADERS  += mainwindow.h \
     loader.h \
@@ -49,7 +50,8 @@ HEADERS  += mainwindow.h \
     parsers/sankakuchannelparser.h \
     parsers/booruparser.h \
     parsers/yandereparser.h \
-    parsers/danbooruparser.h
+    parsers/danbooruparser.h \
+    parsers/gelbooruparser.h
 
 FORMS    += mainwindow.ui
 
