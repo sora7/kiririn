@@ -3,13 +3,11 @@
 KonachanParser::KonachanParser()
 {
     this->_site_url = "konachan.com";
-
     this->_http_prefix = "https://";
-
     this->_query_prefix = "/post?tags=";
     this->_query_sep = "+";
     this->_query_suffix = "";
-    this->_tags_max = 0;
+    this->_tags_max = 6;
 //    rel="next" href="/post?page=2&amp;tags=yuigahama_yui">
     this->_rxNextPage = QRegExp("rel=\"next\" href=\"(/post[?]page=\\d+&amp;tags=.*)\">");
     this->_rxNextPage.setMinimal(true);
@@ -32,7 +30,6 @@ KonachanParser::KonachanParser()
     QString orig2 = "<li><a class=\"original-file-.{0,2}changed\" href=\"//(konachan.com/image/[a-z0-9]*/(.*[.]([a-z0-9]{3,4})))\" id=\".*\">.*</a>";
     this->_rxOrig2 = QRegExp(orig2);
     this->_rxOrig2.setMinimal(true);
-
 
 //    <img alt="heirou saikyougui_no_dark_hero tagme_(character)" class="image" height="1072" id="image" large_height="2048" large_width="2866" src="//konachan.com/sample/3e2e2edde836a807c7d6ab0b059d7cd7/Konachan.com%20-%20238379%20sample.jpg" width="1500" />
     QString resize = "<img.*src=\"//(konachan.com/sample/[a-z0-9]*/(.*sample[.]([a-z0-9]{3,4})))\".* />";

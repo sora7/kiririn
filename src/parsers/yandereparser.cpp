@@ -2,13 +2,8 @@
 
 YandeReParser::YandeReParser()
 {
-    this->_tags_max = 0;
-
-
     this->_site_url = "yande.re";
-
     this->_http_prefix = "https://";
-
     this->_query_prefix = "/post?tags=";
     this->_query_sep = "+";
     this->_query_suffix = "";
@@ -27,7 +22,7 @@ YandeReParser::YandeReParser()
     this->_rxRating.setMinimal(true);
 
 //    <a class="original-file-changed" id="highres" href="https://files.yande.re/jpeg/5019c744568e2c27d5278f48b2b12bf2/yande.re%20386461%20cheerleader%20cleavage%20executor%20headphones%20kunikida_hanamaru%20love_live%21_sunshine%21%21%20siva.%20tsushima_yoshiko.jpg">Download larger version (888 KB JPG)</a>
-    QString orig = "<a class=\"original-file-changed\".*href=\"https://(files.yande.re/jpeg/([a-z0-9]*/.*[.]([a-z0-9]{3,4})))\">.*</a>";
+    QString orig = "<a class=\"original-file-changed\".*href=\"https://(files.yande.re/jpeg/[a-z0-9]*/(.*[.]([a-z0-9]{3,4})))\">.*</a>";
     this->_rxOrig = QRegExp(orig);
     this->_rxOrig.setMinimal(true);
 

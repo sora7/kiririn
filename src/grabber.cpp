@@ -51,6 +51,9 @@ void Grabber::startJob(Job currJob)
     if (currJob.getSite() == yandere::shortname) {
         parser = new YandeReParser();
     }
+    if (currJob.getSite() == danbooru::shortname) {
+        parser = new DanbooruParser();
+    }
     cout << parser->name().toStdString() << endl;
     emit logMessage("Site: " + parser->name());
 
@@ -142,7 +145,7 @@ void Grabber::postsProcess(BooruParser* parser, Job currJob)
 
         QString postHtml = loader.loadHtml(postUrl);
         PostInfo postInfo = parser->parsePost(postHtml);
-        cout << postInfo << endl;
+//        cout << postInfo << endl;
         if (
                 (currJob.okRating(postInfo.getRating())) ||
                 (currJob.okRating(RT_OTHER))

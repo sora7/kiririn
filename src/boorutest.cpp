@@ -46,7 +46,7 @@ void BooruTest::test(QString type, int datasetN)
 
 void BooruTest::testing()
 {
-    setBooru("yandere");
+    setBooru("danbooru");
     QString url;
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3844";
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3975?search=hanako";
@@ -99,6 +99,15 @@ void BooruTest::testing()
 //    tags << "kagamine_rin";
 //    cout << parser->genQueryUrl(tags).toStdString() << endl;
 
+//    url = "http://danbooru.donmai.us/posts?tags=chomusuke";
+//    url = "http://danbooru.donmai.us/posts?page=4&tags=aqua_%28konosuba%29";
+//    url = "http://danbooru.donmai.us/posts/2602900";
+//    url = "http://danbooru.donmai.us/posts/2657629";
+//    url = "http://danbooru.donmai.us/posts/2657867";
+//    url = "http://danbooru.donmai.us/posts/2621161";
+//    url = "http://danbooru.donmai.us/posts/2623779";
+
+
     test("search");
     test("post");
 }
@@ -123,6 +132,9 @@ void BooruTest::setBooru(QString shortname)
     }
     if (shortname == yandere::shortname) {
         parser = new YandeReParser();
+    }
+    if (shortname == danbooru::shortname) {
+        parser = new DanbooruParser();
     }
 }
 
