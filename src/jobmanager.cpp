@@ -1,6 +1,6 @@
 #include "jobmanager.h"
 
-const QString JobManager::DB_PATH = QString("jobs.db");
+const QString JobManager::DB_PATH = QString("jobs.sqlite");
 
 JobManager::JobManager()
 {

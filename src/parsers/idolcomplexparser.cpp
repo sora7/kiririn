@@ -2,12 +2,16 @@
 
 IdolComplexParser::IdolComplexParser()
 {
-
 }
 
 IdolComplexParser::~IdolComplexParser()
 {
 
+}
+
+QString IdolComplexParser::name()
+{
+    return idol::fullname;
 }
 
 QString IdolComplexParser::genQueryUrl(QStringList tags)

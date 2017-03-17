@@ -17,6 +17,8 @@ public:
     Parser();
     ~Parser();
 
+    virtual QString name() = 0;
+
     static QString readFile(QString filename);
 
     virtual QString genQueryUrl(QStringList tags) = 0;
@@ -24,6 +26,7 @@ public:
     PostInfo parsePost(QString htmlText);
 
 protected:
+
     QStringList findall(QString text, QString regex, int pos_shift=0, QString prefix="");
     PicFormat checkFormat(QString str);
 

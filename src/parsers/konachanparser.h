@@ -3,11 +3,18 @@
 
 #include "parsers/parser.h"
 
+namespace konachan {
+    const QString fullname = "Konachan";
+    const QString shortname = "konachan";
+}
+
 class KonachanParser : public Parser
 {
 public:
     KonachanParser();
     ~KonachanParser();
+
+    QString name();
 
     QString genQueryUrl(QStringList tags);
 

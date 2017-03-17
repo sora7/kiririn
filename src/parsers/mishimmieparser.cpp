@@ -8,6 +8,11 @@ MishimmieParser::~MishimmieParser()
 {
 }
 
+QString MishimmieParser::name()
+{
+    return katawa::fullname;
+}
+
 QString MishimmieParser::genQueryUrl(QStringList tags)
 {
     QString queryUrl("https://shimmie.katawa-shoujo.com/post/list/");

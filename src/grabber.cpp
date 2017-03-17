@@ -31,28 +31,25 @@ QSqlTableModel *Grabber::jobModel()
 void Grabber::startJob(Job currJob)
 {
     cout << currJob << endl;
-
+    emit logMessage("Job start");
     Parser* parser;
-    if (currJob.getSite() == "sankaku") {
+    if (currJob.getSite() == sankaku::shortname) {
         parser = new SankakuParser();
-        cout << "Sankaku Channel" << endl;
     }
-    if (currJob.getSite() == "idol") {
+    if (currJob.getSite() == idol::shortname) {
         parser = new IdolComplexParser();
-        cout << "Idol Complex" << endl;
     }
-    if (currJob.getSite() == "katawa") {
+    if (currJob.getSite() == katawa::shortname) {
         parser = new MishimmieParser();
-        cout << "Mishimmie" << endl;
     }
-    if (currJob.getSite() == "4chan") {
+    if (currJob.getSite() == fourchan::shortname) {
         parser = new FourChanHouseParser();
-        cout << "4chan House" << endl;
     }
-    if (currJob.getSite() == "konachan") {
+    if (currJob.getSite() == konachan::shortname) {
         parser = new KonachanParser();
-        cout << "Konachan" << endl;
     }
+    cout << parser->name().toStdString() << endl;
+    emit logMessage("Site: " + parser->name());
 
     switch (currJob.getStatus()) {
     case READY: {
@@ -65,6 +62,7 @@ void Grabber::startJob(Job currJob)
         currJob.setStatus(SEARCH_START);
     }
     case SEARCH_START: {
+        emit logMessage("Search processing start");
         this->searchProcess(currJob.getLastSearchUrl(), parser, currJob.getId());
     }
     case SEARCH_DONE: {
@@ -75,6 +73,7 @@ void Grabber::startJob(Job currJob)
     }
     case PICS_DONE: {
         cout << "ALL DONE!" << endl;
+        emit logMessage("Job finish");
     }
     }
     delete parser;
@@ -100,13 +99,15 @@ void Grabber::startJob(Job currJob)
 void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
 {
     cout << "SEARCH PROCESS\tURL: " << searchUrl.toStdString() << endl;
+    emit logMessage("Search url: " + searchUrl);
     emit stageChange(SEARCH);
 
     Loader loader;
     QString htmlText = loader.loadHtml(searchUrl);
 
     SearchInfo searchInfo = parser->parseSearch(htmlText);
-
+    emit logMessage(QString::number(searchInfo.getPosts().length())
+                    + " posts found");
     this->jobManager->addPosts(searchInfo.getPosts(), jobID);
 
     if (searchInfo.hasNext()) {
@@ -118,25 +119,27 @@ void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
     }
     else {
         this->jobManager->updStatus(SEARCH_DONE, jobID);
+        emit logMessage("Search processing finish");
     }
 }
 
 void Grabber::postsProcess(Parser* parser, Job currJob)
 {
     cout << "POSTS PROCESS" << endl;
+    emit logMessage("Post processing start");
     emit stageChange(POST);
 
     QList<PostInfo> postList = this->jobManager->readPosts(currJob.getId());
+    emit logMessage("Count: " + QString::number(postList.length()));
 
     Loader loader;
     for (int i = 0; i < postList.count(); i++) {
         QString postUrl = postList.at(i).getUrl();
+        emit logMessage("post url: " + postUrl);
 
         QString postHtml = loader.loadHtml(postUrl);
         PostInfo postInfo = parser->parsePost(postHtml);
-
 //        cout << postInfo << endl;
-
         if (
                 (currJob.okRating(postInfo.getRating())) ||
                 (currJob.okRating(RT_OTHER))
@@ -155,6 +158,7 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
                     okList << picInfo;
                 }
             }
+            emit logMessage(QString::number(okList.length()) + " pics added");
             this->jobManager->addPics(okList, currJob.getId());
             this->jobManager->postDone(postList.at(i).getId());
         }
@@ -162,11 +166,13 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
     }
     this->jobManager->updStatus(POSTS_DONE, currJob.getId());
     cout << "POSTS FINISH" << endl;
+    emit logMessage("Post processing finish");
 }
 
 void Grabber::picsDownload(int jobID)
 {
     cout << "PICS DOWNLOAD" << endl;
+    emit logMessage("Pics download start");
     emit stageChange(DOWNLOAD);
 
     QList<PicInfo> picList = this->jobManager->readPics(jobID);
@@ -175,6 +181,8 @@ void Grabber::picsDownload(int jobID)
         PicInfo picInfo = picList.at(i);
 
         cout << "LOAD #" << i+1 << endl;
+        emit logMessage("Download pic #" + QString::number(i+1));
+
         cout << picInfo.getName().toStdString() << endl;
         cout << picInfo.getName().toStdString() << endl;
 
@@ -185,4 +193,5 @@ void Grabber::picsDownload(int jobID)
     }
     this->jobManager->updStatus(PICS_DONE, jobID);
     cout << "DOWNLOAD COMPLETE" << endl;
+    emit logMessage("Pic download complete");
 }

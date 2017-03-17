@@ -31,6 +31,8 @@ public slots:
 
     void progressChange(const int current, const int total);
     void stageChange(GrabberStage stage);
+
+    void logMessage(QString messageText);
 private:
     Job getJobSettings();
 

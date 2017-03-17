@@ -10,6 +10,11 @@ KonachanParser::~KonachanParser()
 
 }
 
+QString KonachanParser::name()
+{
+    return konachan::fullname;
+}
+
 QString KonachanParser::genQueryUrl(QStringList tags)
 {
     QString queryUrl("https://konachan.com/post?tags=");

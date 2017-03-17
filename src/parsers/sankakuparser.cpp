@@ -2,10 +2,16 @@
 
 SankakuParser::SankakuParser()
 {
+
 }
 
 SankakuParser::~SankakuParser()
 {
+}
+
+QString SankakuParser::name()
+{
+    return sankaku::fullname;
 }
 
 QString SankakuParser::genQueryUrl(QStringList tags)

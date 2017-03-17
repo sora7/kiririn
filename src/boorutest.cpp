@@ -87,20 +87,20 @@ void BooruTest::testing()
 void BooruTest::setBooru(QString shortname)
 {
     this->_booru = shortname;
-    if (shortname == "sankaku") {
-        this->parser = new SankakuParser();
+    if (shortname == sankaku::shortname) {
+        parser = new SankakuParser();
     }
-    if (shortname == "katawa") {
-        this->parser = new MishimmieParser();
+    if (shortname == idol::shortname) {
+        parser = new IdolComplexParser();
     }
-    if (shortname == "4chan") {
-        this->parser = new FourChanHouseParser();
+    if (shortname == katawa::shortname) {
+        parser = new MishimmieParser();
     }
-    if (shortname == "idol") {
-        this->parser = new IdolComplexParser();
+    if (shortname == fourchan::shortname) {
+        parser = new FourChanHouseParser();
     }
-    if (shortname == "konachan") {
-        this->parser = new KonachanParser();
+    if (shortname == konachan::shortname) {
+        parser = new KonachanParser();
     }
 }
 

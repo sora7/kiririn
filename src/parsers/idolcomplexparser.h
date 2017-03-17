@@ -3,11 +3,18 @@
 
 #include "parsers/parser.h"
 
+namespace idol {
+    const QString fullname = "Idol Complex";
+    const QString shortname = "idol";
+}
+
 class IdolComplexParser : public Parser
 {
 public:
     IdolComplexParser();
     ~IdolComplexParser();
+
+    QString name();
 
     QString genQueryUrl(QStringList tags);
 

@@ -13,15 +13,26 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->progressChange(0, 0);
 
-    ui->comboBox_site->addItem("Sankaku Channel",   QVariant("sankaku"));
-    ui->comboBox_site->addItem("Idol Complex",      QVariant("idol"));
-    ui->comboBox_site->addItem("Konachan",          QVariant("konachan"));
-    ui->comboBox_site->addItem("Mishimmie",         QVariant("katawa"));
-    ui->comboBox_site->addItem("4chan House",       QVariant("4chan"));
+    ui->comboBox_site->addItem(sankaku::fullname,
+                               QVariant(sankaku::shortname));
+    ui->comboBox_site->addItem(idol::fullname,
+                               QVariant(idol::shortname));
+    ui->comboBox_site->addItem(konachan::fullname,
+                               QVariant(konachan::shortname));
+    ui->comboBox_site->addItem(katawa::fullname,
+                               QVariant(katawa::shortname));
+    ui->comboBox_site->addItem(fourchan::fullname,
+                               QVariant(fourchan::shortname));
+//    ui->comboBox_site->addItem("Sankaku Channel",   QVariant("sankaku"));
+//    ui->comboBox_site->addItem("Idol Complex",      QVariant("idol"));
+//    ui->comboBox_site->addItem("Konachan",          QVariant("konachan"));
+//    ui->comboBox_site->addItem("Mishimmie",         QVariant("katawa"));
+//    ui->comboBox_site->addItem("4chan House",       QVariant("4chan"));
 
 //    ui->comboBox_site->addItem("Yande.re", QVariant("yande.re"));
 //    ui->comboBox_site->addItem("Safebooru", QVariant("safebooru"));
 //    ui->comboBox_site->addItem("Danbooru", QVariant("danbooru"));
+//    ui->comboBox_site->addItem("Gelbooru", QVariant("gelbooru"));
 
     ui->tableView_job->setModel(this->grabber.jobModel());
     ui->tableView_job->verticalHeader()->hide();
@@ -64,6 +75,18 @@ void MainWindow::stageChange(GrabberStage stage)
                              + QString::number((int)stage + 1)
                              + " of 3");
     progressChange(0, 0);
+}
+
+void MainWindow::logMessage(QString messageText)
+{
+    QString line = "[";
+    line += QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    line += "]" + messageText;
+    ui->plainTextEdit_LOG->appendPlainText(line);
+//    ui->plainTextEdit_LOG->verticalScrollBar()
+//    ui->plainTextEdit_LOG->verticalScrollBar()->setValue(
+//                ui->plainTextEdit_LOG->verticalScrollBar()->maximum()
+//                );
 }
 
 Job MainWindow::getJobSettings()
@@ -130,6 +153,7 @@ void MainWindow::bindHandlers()
 //            SLOT(progressChange(int,int)));
     connect(&this->grabber, SIGNAL(progressChange(int, int)), this, SLOT(progressChange(int,int)));
     connect(&this->grabber, SIGNAL(stageChange(GrabberStage)), this, SLOT(stageChange(GrabberStage)));
+    connect(&this->grabber, SIGNAL(logMessage(QString)), this, SLOT(logMessage(QString)));
 }
 
 void MainWindow::test()

@@ -37,13 +37,10 @@ public:
 signals:
     void stageChange(GrabberStage stage);
     void progressChange(int current, int total);
+    void logMessage(QString messageText);
 private:
     JobManager* jobManager;
     Job _currentJob;
-
-//    GraberStage _stage;
-//    int _progress_curr;
-//    int _progress_total;
 
     void startJob(Job currJob);
 

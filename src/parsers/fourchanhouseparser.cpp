@@ -2,12 +2,16 @@
 
 FourChanHouseParser::FourChanHouseParser()
 {
-
 }
 
 FourChanHouseParser::~FourChanHouseParser()
 {
 
+}
+
+QString FourChanHouseParser::name()
+{
+    return fourchan::fullname;
 }
 
 QString FourChanHouseParser::genQueryUrl(QStringList tags)
