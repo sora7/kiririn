@@ -29,6 +29,8 @@ public slots:
     void stopButtonHandler();
     void contButtonHandler();
 
+    void progressChange(const int current, const int total);
+    void stageChange(GrabberStage stage);
 private:
     Job getJobSettings();
 

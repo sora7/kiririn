@@ -1,6 +1,8 @@
 #ifndef GRABBER_H
 #define GRABBER_H
 
+#include <QObject>
+
 #include <iostream>
 
 using namespace std;
@@ -15,21 +17,33 @@ using namespace std;
 
 #include "jobmanager.h"
 
-class Grabber
+enum GrabberStage {
+    SEARCH,
+    POST,
+    DOWNLOAD
+};
+
+class Grabber : public QObject
 {
+    Q_OBJECT
 public:
-    Grabber();
+    explicit Grabber(QObject *parent = 0);
     ~Grabber();
 
     void startNewJob(Job newJob);
     void contLastJob();
 
     QSqlTableModel* jobModel();
-
+signals:
+    void stageChange(GrabberStage stage);
+    void progressChange(int current, int total);
 private:
     JobManager* jobManager;
-
     Job _currentJob;
+
+//    GraberStage _stage;
+//    int _progress_curr;
+//    int _progress_total;
 
     void startJob(Job currJob);
 

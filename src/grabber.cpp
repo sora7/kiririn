@@ -1,6 +1,7 @@
 #include "grabber.h"
 
-Grabber::Grabber()
+Grabber::Grabber(QObject *parent) :
+    QObject(parent)
 {
     this->jobManager = new JobManager();
 }
@@ -99,6 +100,8 @@ void Grabber::startJob(Job currJob)
 void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
 {
     cout << "SEARCH PROCESS\tURL: " << searchUrl.toStdString() << endl;
+    emit stageChange(SEARCH);
+
     Loader loader;
     QString htmlText = loader.loadHtml(searchUrl);
 
@@ -121,6 +124,8 @@ void Grabber::searchProcess(QString searchUrl, Parser *parser, int jobID)
 void Grabber::postsProcess(Parser* parser, Job currJob)
 {
     cout << "POSTS PROCESS" << endl;
+    emit stageChange(POST);
+
     QList<PostInfo> postList = this->jobManager->readPosts(currJob.getId());
 
     Loader loader;
@@ -153,6 +158,7 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
             this->jobManager->addPics(okList, currJob.getId());
             this->jobManager->postDone(postList.at(i).getId());
         }
+        emit progressChange(i+1, postList.count());
     }
     this->jobManager->updStatus(POSTS_DONE, currJob.getId());
     cout << "POSTS FINISH" << endl;
@@ -161,6 +167,8 @@ void Grabber::postsProcess(Parser* parser, Job currJob)
 void Grabber::picsDownload(int jobID)
 {
     cout << "PICS DOWNLOAD" << endl;
+    emit stageChange(DOWNLOAD);
+
     QList<PicInfo> picList = this->jobManager->readPics(jobID);
     Loader loader;
     for (int i = 0; i < picList.count(); i++) {
@@ -172,6 +180,8 @@ void Grabber::picsDownload(int jobID)
 
         loader.loadFile(picInfo.getUrl(), picInfo.getName());
         this->jobManager->picDone(picInfo.getId());
+
+        emit progressChange(i+1, picList.count());
     }
     this->jobManager->updStatus(PICS_DONE, jobID);
     cout << "DOWNLOAD COMPLETE" << endl;

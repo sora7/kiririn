@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->progressChange(0, 0);
+
     ui->comboBox_site->addItem("Sankaku Channel",   QVariant("sankaku"));
     ui->comboBox_site->addItem("Idol Complex",      QVariant("idol"));
     ui->comboBox_site->addItem("Konachan",          QVariant("konachan"));
@@ -48,6 +50,20 @@ void MainWindow::stopButtonHandler()
 void MainWindow::contButtonHandler()
 {
     this->grabber.contLastJob();
+}
+
+void MainWindow::progressChange(const int current, const int total)
+{
+    ui->progressBar->setValue(current);
+    ui->progressBar->setMaximum(total);
+}
+
+void MainWindow::stageChange(GrabberStage stage)
+{
+    ui->label_STAGE->setText("Stage "
+                             + QString::number((int)stage + 1)
+                             + " of 3");
+    progressChange(0, 0);
 }
 
 Job MainWindow::getJobSettings()
@@ -110,6 +126,10 @@ void MainWindow::bindHandlers()
             SLOT(stopButtonHandler()));
     connect(ui->pushButton_CONTINUE, SIGNAL(clicked()), this,
             SLOT(contButtonHandler()));
+//    connect(this->grabber, SIGNAL(progressChange(int, int)), this,
+//            SLOT(progressChange(int,int)));
+    connect(&this->grabber, SIGNAL(progressChange(int, int)), this, SLOT(progressChange(int,int)));
+    connect(&this->grabber, SIGNAL(stageChange(GrabberStage)), this, SLOT(stageChange(GrabberStage)));
 }
 
 void MainWindow::test()
