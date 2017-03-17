@@ -15,6 +15,11 @@ public:
     ~KonachanParser();
 
     QString name();
+
+    QList<PicInfo> getPics(QString htmlText);
+
+protected:
+    QRegExp _rxOrig2;
 };
 
 #endif // KONACHANPARSER_H

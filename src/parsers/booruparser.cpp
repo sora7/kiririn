@@ -103,7 +103,7 @@ QStringList BooruParser::getPosts(QString htmlText)
 
 QList<PicInfo> BooruParser::getPics(QString htmlText)
 {
-    cout << "booru pics" << endl;
+//    cout << "booru pics" << endl;
     QList<PicInfo> pics;
 
     this->_rxOrig.setMinimal(true);//lazy quantifiers, qt you suck

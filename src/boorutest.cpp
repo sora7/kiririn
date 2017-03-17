@@ -46,7 +46,7 @@ void BooruTest::test(QString type, int datasetN)
 
 void BooruTest::testing()
 {
-    setBooru("katawa");
+    setBooru("yandere");
     QString url;
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3844";
 //    url = "https://shimmie.katawa-shoujo.com/post/view/3975?search=hanako";
@@ -79,7 +79,26 @@ void BooruTest::testing()
 //    url = "https://konachan.com/post?tags=atomix";
 //    url = "https://konachan.com/post?tags=alice_%28wonderland%29";
 
+//    url = "https://yande.re/post?tags=hatsune_miku+kagamine_rin";
 //    load("search", url);
+//    url = "https://yande.re/post?tags=kunikida_hanamaru";
+//    load("search", url);
+//    url = "https://yande.re/post/show/323982";
+//    load("post", url);
+//    url = "https://yande.re/post/show/315898";
+//    load("post", url);
+//    url = "https://yande.re/post/show/386461";
+//    load("post", url);
+//    url = "https://yande.re/post/show/386519";
+//    load("post", url);
+//    url = "https://yande.re/post/show/386510";
+//    load("post", url);
+
+//    QStringList tags;
+//    tags << "hatsune_miku";
+//    tags << "kagamine_rin";
+//    cout << parser->genQueryUrl(tags).toStdString() << endl;
+
     test("search");
     test("post");
 }
@@ -101,6 +120,9 @@ void BooruTest::setBooru(QString shortname)
     }
     if (shortname == konachan::shortname) {
         parser = new KonachanParser();
+    }
+    if (shortname == yandere::shortname) {
+        parser = new YandeReParser();
     }
 }
 

@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-//#include <fstream>
-
 #include "boorutest.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -19,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
                                QVariant(idol::shortname));
     ui->comboBox_site->addItem(konachan::fullname,
                                QVariant(konachan::shortname));
+    ui->comboBox_site->addItem(yandere::fullname,
+                               QVariant(yandere::shortname));
     ui->comboBox_site->addItem(katawa::fullname,
                                QVariant(katawa::shortname));
     ui->comboBox_site->addItem(fourchan::fullname,
@@ -28,11 +28,11 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->comboBox_site->addItem("Konachan",          QVariant("konachan"));
 //    ui->comboBox_site->addItem("Mishimmie",         QVariant("katawa"));
 //    ui->comboBox_site->addItem("4chan House",       QVariant("4chan"));
+//    ui->comboBox_site->addItem("Yande.re",          QVariant("yande.re"));
 
-//    ui->comboBox_site->addItem("Yande.re", QVariant("yande.re"));
-//    ui->comboBox_site->addItem("Safebooru", QVariant("safebooru"));
-//    ui->comboBox_site->addItem("Danbooru", QVariant("danbooru"));
-//    ui->comboBox_site->addItem("Gelbooru", QVariant("gelbooru"));
+//    ui->comboBox_site->addItem("Safebooru",         QVariant("safebooru"));
+//    ui->comboBox_site->addItem("Danbooru",          QVariant("danbooru"));
+//    ui->comboBox_site->addItem("Gelbooru",          QVariant("gelbooru"));
 
     ui->tableView_job->setModel(this->grabber.jobModel());
     ui->tableView_job->verticalHeader()->hide();

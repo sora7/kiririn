@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     parsers/idolcomplexparser.cpp \
     parsers/konachanparser.cpp \
     parsers/sankakuchannelparser.cpp \
-    parsers/booruparser.cpp
+    parsers/booruparser.cpp \
+    parsers/yandereparser.cpp
 
 HEADERS  += mainwindow.h \
     loader.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     parsers/idolcomplexparser.h \
     parsers/konachanparser.h \
     parsers/sankakuchannelparser.h \
-    parsers/booruparser.h
+    parsers/booruparser.h \
+    parsers/yandereparser.h
 
 FORMS    += mainwindow.ui
 

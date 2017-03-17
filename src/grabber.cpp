@@ -48,6 +48,9 @@ void Grabber::startJob(Job currJob)
     if (currJob.getSite() == konachan::shortname) {
         parser = new KonachanParser();
     }
+    if (currJob.getSite() == yandere::shortname) {
+        parser = new YandeReParser();
+    }
     cout << parser->name().toStdString() << endl;
     emit logMessage("Site: " + parser->name());
 

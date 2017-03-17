@@ -8,6 +8,7 @@
 #include "parsers/fourchanhouseparser.h"
 #include "parsers/idolcomplexparser.h"
 #include "parsers/konachanparser.h"
+#include "parsers/yandereparser.h"
 
 class BooruTest
 {

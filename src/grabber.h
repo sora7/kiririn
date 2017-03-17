@@ -14,6 +14,7 @@ using namespace std;
 #include "parsers/fourchanhouseparser.h"
 #include "parsers/idolcomplexparser.h"
 #include "parsers/konachanparser.h"
+#include "parsers/yandereparser.h"
 
 #include "jobmanager.h"
 
