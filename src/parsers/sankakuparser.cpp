@@ -5,7 +5,7 @@ SankakuParser::SankakuParser()
     this->_http_prefix = "https://";
 
     this->_query_prefix = "/?tags=";
-    this->_query_sep = "+";
+    this->_query_tag_sep = "+";
     this->_query_suffix = "&commit=Search";
     this->_tags_max = 4;
 

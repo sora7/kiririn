@@ -5,7 +5,7 @@ KonachanParser::KonachanParser()
     this->_site_url = "konachan.com";
     this->_http_prefix = "https://";
     this->_query_prefix = "/post?tags=";
-    this->_query_sep = "+";
+    this->_query_tag_sep = "+";
     this->_query_suffix = "";
     this->_tags_max = 6;
 //    rel="next" href="/post?page=2&amp;tags=yuigahama_yui">

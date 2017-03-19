@@ -8,7 +8,7 @@ FourChanHouseParser::FourChanHouseParser()
     this->_http_prefix  = "https://";
     this->_site_url     = "shimmie.4chanhouse.org";
     this->_query_prefix = "/index.php?q=/post/list/";
-    this->_query_sep    = "+";
+    this->_query_tag_sep    = "+";
     this->_query_suffix = "/1";
     this->_tags_max     = 0;
 

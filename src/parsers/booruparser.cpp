@@ -51,7 +51,7 @@ QString BooruParser::genQueryUrl(QStringList tags)
     else {
         slice = tags;
     }
-    queryUrl += slice.join(this->_query_sep);
+    queryUrl += slice.join(this->_query_tag_sep);
 
     queryUrl += this->_query_suffix;
 

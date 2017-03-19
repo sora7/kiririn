@@ -6,7 +6,7 @@ GelbooruParser::GelbooruParser()
     this->_site_url = "gelbooru.com";
 
     this->_query_prefix = "/index.php?page=post&s=list&tags=";
-    this->_query_sep = "+";
+    this->_query_tag_sep = "+";
     this->_query_suffix = "";
     this->_tags_max = 0;
 //    <b>1</b> <a href="?page=post&amp;s=list&amp;tags=ayakura_juu+1girl&amp;pid=42">

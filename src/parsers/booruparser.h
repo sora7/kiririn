@@ -15,21 +15,21 @@ class BooruParser
 {
 public:
     BooruParser();
-    ~BooruParser();
+    virtual ~BooruParser();
 
     virtual QString name() = 0;
 
     static QString readFile(QString filename);
+    //============================================//
     SearchInfo parseSearch(QString htmlText);
     PostInfo parsePost(QString htmlText);
-    //============================================//
     virtual QString genQueryUrl(QStringList tags);
     //============================================//
 protected:
     QString _http_prefix;
     QString _site_url;
     QString _query_prefix;
-    QString _query_sep;
+    QString _query_tag_sep;
     QString _query_suffix;
     int _tags_max;
 

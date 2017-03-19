@@ -6,7 +6,7 @@ DanbooruParser::DanbooruParser()
     this->_site_url = "danbooru.donmai.us";
 
     this->_query_prefix = "/posts?utf8=✓&tags=";
-    this->_query_sep = "+";
+    this->_query_tag_sep = "+";
     this->_query_suffix = "&ms=1";
     this->_tags_max = 2;
 //    <li><a rel="next" href="/posts?ms=1&amp;page=2&amp;tags=megumin+thighhighs&amp;utf8=%E2%9C%93">&gt;&gt;</a></li>
