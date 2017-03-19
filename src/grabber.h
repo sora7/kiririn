@@ -17,6 +17,7 @@ using namespace std;
 #include "parsers/yandereparser.h"
 #include "parsers/danbooruparser.h"
 #include "parsers/gelbooruparser.h"
+#include "parsers/safebooruparser.h"
 
 #include "jobmanager.h"
 

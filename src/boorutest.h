@@ -11,6 +11,7 @@
 #include "parsers/yandereparser.h"
 #include "parsers/danbooruparser.h"
 #include "parsers/gelbooruparser.h"
+#include "parsers/safebooruparser.h"
 
 class BooruTest
 {
@@ -20,6 +21,7 @@ public:
 
     void setBooru(QString shortname);
     void load(QString type, QString url);
+    void load(QString type, QStringList urlList);
 //    dataset == 0: test all datasets
     void test(QString type, int datasetN=0);
 

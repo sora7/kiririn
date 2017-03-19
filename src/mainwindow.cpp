@@ -23,10 +23,13 @@ MainWindow::MainWindow(QWidget *parent) :
                                QVariant(danbooru::shortname));
     ui->comboBox_site->addItem(gelbooru::fullname,
                                QVariant(gelbooru::shortname));
+    ui->comboBox_site->addItem(safebooru::fullname,
+                               QVariant(safebooru::shortname));
     ui->comboBox_site->addItem(katawa::fullname,
                                QVariant(katawa::shortname));
     ui->comboBox_site->addItem(fourchan::fullname,
                                QVariant(fourchan::shortname));
+
 //    ui->comboBox_site->addItem("Sankaku Channel",   QVariant("sankaku"));
 //    ui->comboBox_site->addItem("Idol Complex",      QVariant("idol"));
 //    ui->comboBox_site->addItem("Konachan",          QVariant("konachan"));
@@ -35,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->comboBox_site->addItem("Yande.re",          QVariant("yande.re"));
 //    ui->comboBox_site->addItem("Danbooru",          QVariant("danbooru"));
 //    ui->comboBox_site->addItem("Gelbooru",          QVariant("gelbooru"));
-
 //    ui->comboBox_site->addItem("Safebooru",         QVariant("safebooru"));
 
 

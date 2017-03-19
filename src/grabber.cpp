@@ -33,29 +33,33 @@ void Grabber::startJob(Job currJob)
     cout << currJob << endl;
     emit logMessage("Job start");
     BooruParser* parser;
-    if (currJob.getSite() == sankaku::shortname) {
+    QString siteName = currJob.getSite();
+    if (siteName == sankaku::shortname) {
         parser = new SankakuChannelParser();
     }
-    if (currJob.getSite() == idol::shortname) {
+    if (siteName == idol::shortname) {
         parser = new IdolComplexParser();
     }
-    if (currJob.getSite() == katawa::shortname) {
+    if (siteName == katawa::shortname) {
         parser = new MishimmieParser();
     }
-    if (currJob.getSite() == fourchan::shortname) {
+    if (siteName == fourchan::shortname) {
         parser = new FourChanHouseParser();
     }
-    if (currJob.getSite() == konachan::shortname) {
+    if (siteName == konachan::shortname) {
         parser = new KonachanParser();
     }
-    if (currJob.getSite() == yandere::shortname) {
+    if (siteName == yandere::shortname) {
         parser = new YandeReParser();
     }
-    if (currJob.getSite() == danbooru::shortname) {
+    if (siteName == danbooru::shortname) {
         parser = new DanbooruParser();
     }
-    if (currJob.getSite() == gelbooru::shortname) {
+    if (siteName == gelbooru::shortname) {
         parser = new GelbooruParser();
+    }
+    if (siteName == safebooru::shortname) {
+        parser = new SafebooruParser();
     }
     cout << parser->name().toStdString() << endl;
     emit logMessage("Site: " + parser->name());

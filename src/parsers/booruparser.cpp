@@ -63,6 +63,9 @@ PicFormat BooruParser::checkFormat(QString str)
     if (str == "jpg") {
         return JPG;
     }
+    if (str == "jpeg") {
+        return JPG;
+    }
     if (str == "png") {
         return PNG;
     }

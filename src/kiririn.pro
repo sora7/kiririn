@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     parsers/booruparser.cpp \
     parsers/yandereparser.cpp \
     parsers/danbooruparser.cpp \
-    parsers/gelbooruparser.cpp
+    parsers/gelbooruparser.cpp \
+    parsers/safebooruparser.cpp
 
 HEADERS  += mainwindow.h \
     loader.h \
@@ -51,7 +52,8 @@ HEADERS  += mainwindow.h \
     parsers/booruparser.h \
     parsers/yandereparser.h \
     parsers/danbooruparser.h \
-    parsers/gelbooruparser.h
+    parsers/gelbooruparser.h \
+    parsers/safebooruparser.h
 
 FORMS    += mainwindow.ui
 
