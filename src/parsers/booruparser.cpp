@@ -83,7 +83,6 @@ PicFormat BooruParser::checkFormat(QString str)
 
 QString BooruParser::getNextPage(QString htmlText)
 {
-    cout << "next booru" << endl;
     QString nextPage;
 
     int pos = this->_rxNextPage.indexIn(htmlText);
@@ -97,7 +96,6 @@ QString BooruParser::getNextPage(QString htmlText)
 
 QStringList BooruParser::getPosts(QString htmlText)
 {
-    cout << "posts booru" << endl;
     QString prefix = this->_http_prefix + this->_site_url;
     QStringList postsList = findall(htmlText, this->_rxPost, 0, prefix);
 
@@ -106,7 +104,6 @@ QStringList BooruParser::getPosts(QString htmlText)
 
 QList<PicInfo> BooruParser::getPics(QString htmlText)
 {
-//    cout << "booru pics" << endl;
     QList<PicInfo> pics;
 
     this->_rxOrig.setMinimal(true);//lazy quantifiers, qt you suck
@@ -145,7 +142,6 @@ QList<PicInfo> BooruParser::getPics(QString htmlText)
 
 PostRating BooruParser::getRating(QString htmlText)
 {
-    cout << "booru rating" << endl;
 //    <li>Rating: Safe</li>
 //    <li>Rating: Questionable</li>
 //    <li>Rating: Explicit</li>

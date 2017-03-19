@@ -32,6 +32,7 @@ void Grabber::startJob(Job currJob)
 {
     cout << currJob << endl;
     emit logMessage("Job start");
+
     BooruParser* parser;
     QString siteName = currJob.getSite();
     if (siteName == sankaku::shortname) {
@@ -63,6 +64,9 @@ void Grabber::startJob(Job currJob)
     }
     cout << parser->name().toStdString() << endl;
     emit logMessage("Site: " + parser->name());
+
+    this->_picNamer.setPattern(currJob.getFilenameTemplate());
+    this->_picNamer.setPicsPath(currJob.getSavePath());
 
     switch (currJob.getStatus()) {
     case READY: {
@@ -168,6 +172,9 @@ void Grabber::postsProcess(BooruParser* parser, Job currJob)
                     )
                 {
                     //name?
+                    picInfo.setName(
+                                this->_picNamer.checkName(picInfo.getName())
+                                );
                     okList << picInfo;
                 }
             }
@@ -197,7 +204,7 @@ void Grabber::picsDownload(int jobID)
         emit logMessage("Download pic #" + QString::number(i+1));
 
         cout << picInfo.getName().toStdString() << endl;
-        cout << picInfo.getUrl().toStdString() << endl;
+//        cout << picInfo.getUrl().toStdString() << endl;
 
         loader.loadFile(picInfo.getUrl(), picInfo.getName());
         this->jobManager->picDone(picInfo.getId());

@@ -8,6 +8,8 @@
 using namespace std;
 
 #include "loader.h"
+#include "picnamer.h"
+
 #include "parsers/booruparser.h"
 #include "parsers/sankakuchannelparser.h"
 #include "parsers/mishimmieparser.h"
@@ -45,6 +47,7 @@ signals:
 private:
     JobManager* jobManager;
     Job _currentJob;
+    PicNamer _picNamer;
 
     void startJob(Job currJob);
 

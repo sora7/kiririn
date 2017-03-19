@@ -94,6 +94,7 @@ void Loader::loadFile(QString url, QString filename)
     curl_easy_cleanup(curl);
 }
 
+#ifdef DELAY_Q
 void delay(int millisec)
 {
     QTime wakeTime = QTime::currentTime().addMSecs(millisec);
@@ -101,6 +102,13 @@ void delay(int millisec)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
 }
+#endif
+
+#ifdef DELAY_T
+void delay(int millisec) {
+    Sleeper::msleep(millisec);
+}
+#endif
 
 int rand_gap(int from, int to)
 {

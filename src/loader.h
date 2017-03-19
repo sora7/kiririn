@@ -9,8 +9,20 @@
 #include <time.h>
 
 #include <QString>
+
+// delay function using QCoreApplication::processEvents
+#define DELAY_Q
+// delay function using QThread
+//#define DELAY_T
+
+#ifdef DELAY_Q
 #include <QTime>
 #include <QCoreApplication>
+#endif
+
+#ifdef DELAY_T
+#include <QThread>
+#endif
 
 #include <curl/curl.h>
 
@@ -30,6 +42,14 @@ public:
 private:
 
 };
+
+#ifdef DELAY_T
+class Sleeper : public QThread
+{
+public:
+    static void msleep(unsigned long msec) { QThread::msleep(msec); }
+};
+#endif
 
 void delay(int millisec);
 int rand_gap(int from, int to);
