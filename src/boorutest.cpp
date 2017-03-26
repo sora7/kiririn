@@ -1,6 +1,6 @@
 #include "boorutest.h"
 
-BooruTest::BooruTest()
+BooruTest::BooruTest(QObject *parent)
 {
 }
 
@@ -9,39 +9,61 @@ BooruTest::~BooruTest()
     delete this->parser;
 }
 
-void BooruTest::load(QString type, QString url)
+void BooruTest::load(QStringList urlList)
 {
+    m_urlList.append(urlList);
+    QString urlInit = m_urlList.dequeue();
+    load_start(urlInit);
+}
+
+void BooruTest::load_start(QString url)
+{
+    cout << "load start" << endl;
+    m_loader = new Loader(url);
+
+    bool daun = connect(m_loader,
+            SIGNAL(downloaded()),
+            this,
+            SLOT(load_finish())
+            );
+    cout << daun << endl;
+}
+
+void BooruTest::load_finish()
+{
+    cout << "load finish" << endl;
     QString fname;
     int datasetCount = 1;
-    while (QFile::exists(fname = testFilename(type, datasetCount))) {
+    while (QFile::exists(fname = testFilename(datasetCount))) {
         datasetCount++;
     }
 
-    Loader loader;
-    loader.loadFile(url, fname);
-}
+    QFile file(fname);
+    file.open(QIODevice::WriteOnly);
+    file.write(m_loader->downloadedData());
+    file.close();
 
-void BooruTest::load(QString type, QStringList urlList)
-{
-    QStringListIterator iter(urlList);
-    while(iter.hasNext()) {
-        load(type, iter.next());
+    delete m_loader;
+
+    if (!m_urlList.empty()) {
+        QString url = m_urlList.dequeue();
+        load_start(url);
     }
 }
 
-void BooruTest::test(QString type, int datasetN)
+void BooruTest::test(int datasetN)
 {
     if (datasetN == 0) {
         int count = 1;
-        while (QFile::exists( testFilename(type, count) )) {
-            this->test(type, count);
+        while (QFile::exists( testFilename(count) )) {
+            this->test(count);
             count++;
         }
     }
     else {
         cout << "Dataset #" << datasetN << endl;
-        QString fname = testFilename(type, datasetN);
-        if (type == "search") {
+        QString fname = testFilename(datasetN);
+        if (m_type == "search") {
             SearchInfo sinfo =  parser->parseSearch(BooruParser::readFile(fname));
             cout << sinfo << endl;
         }
@@ -54,7 +76,8 @@ void BooruTest::test(QString type, int datasetN)
 
 void BooruTest::testing()
 {
-    setBooru("safebooru");
+    setBooru("sankaku");
+    setType("search");
     QStringList urlList;
 //    urlList << "https://shimmie.katawa-shoujo.com/post/view/3844";
 //    urlList << "https://shimmie.katawa-shoujo.com/post/view/3975?search=hanako";
@@ -125,10 +148,14 @@ void BooruTest::testing()
 //    urlList << "https://safebooru.org/index.php?page=post&s=view&id=2177826";
 //    urlList << "https://safebooru.org/index.php?page=post&s=view&id=2177820";
 //    load("post", urlList);
+    urlList << "https://chan.sankakucomplex.com/?tags=yukinoshita_yukino&commit=Search";
+    load(urlList);
 
-    test("search");
-    test("post");
+//    test();
+//    test("post");
 }
+
+
 
 void BooruTest::setBooru(QString shortname)
 {
@@ -162,9 +189,14 @@ void BooruTest::setBooru(QString shortname)
     }
 }
 
-QString BooruTest::testFilename(QString type, int datasetN)
+void BooruTest::setType(QString type)
+{
+    m_type = type;
+}
+
+QString BooruTest::testFilename(int datasetN)
 {
     //    filename template
     //    %booru%_%type%_%datasetN%.txt
-    return this->_booru + "_" + type + "_" + QString::number(datasetN) + ".txt";
+    return this->_booru + "_" + m_type + "_" + QString::number(datasetN) + ".txt";
 }

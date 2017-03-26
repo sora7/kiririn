@@ -1,57 +1,39 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include <string>
 #include <iostream>
 
-#include <cstdio>
-#include <cstdlib>
-#include <time.h>
-
-#include <QString>
-
-// delay function using QCoreApplication::processEvents
-#define DELAY_Q
-// delay function using QThread
-//#define DELAY_T
-
-#ifdef DELAY_Q
-#include <QTime>
-#include <QCoreApplication>
-#endif
-
-#ifdef DELAY_T
-#include <QThread>
-#endif
-
-#include <curl/curl.h>
+#include <QObject>
+#include <QByteArray>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QSslConfiguration>
+#include <QTextCodec>
 
 using namespace std;
 
-const string DEFAULT_UA = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:42.0) Gecko/20100101 Firefox/42.0";
+const QString DEFAULT_UA = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:42.0) "
+                           "Gecko/20100101 Firefox/42.0";
 
-class Loader
+class Loader : public QObject
 {
+    Q_OBJECT
 public:
-    Loader();
+    explicit Loader(QString url, QObject *parent = 0);
+    virtual ~Loader();
+    QByteArray downloadedData() const;
+    QString getHtml() const;
+signals:
+    void downloaded();
 
-    QString loadHtml(QString url);
-
-    void loadFile(QString url, QString filename);
+private slots:
+    void fileDownloaded(QNetworkReply* pReply);
 
 private:
-
+    QNetworkAccessManager m_WebCtrl;
+    QByteArray m_DownloadedData;
 };
-
-#ifdef DELAY_T
-class Sleeper : public QThread
-{
-public:
-    static void msleep(unsigned long msec) { QThread::msleep(msec); }
-};
-#endif
-
-void delay(int millisec);
-int rand_gap(int from, int to);
 
 #endif // LOADER_H
+

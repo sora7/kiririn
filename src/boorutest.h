@@ -1,6 +1,8 @@
 #ifndef BOORUTEST_H
 #define BOORUTEST_H
 
+#include <QObject>
+#include <QQueue>
 
 #include "loader.h"
 #include "parsers/sankakuchannelparser.h"
@@ -13,24 +15,34 @@
 #include "parsers/gelbooruparser.h"
 #include "parsers/safebooruparser.h"
 
-class BooruTest
+class BooruTest : public QObject
 {
+    Q_OBJECT
 public:
-    BooruTest();
+    explicit BooruTest(QObject *parent = 0);
     ~BooruTest();
 
     void setBooru(QString shortname);
-    void load(QString type, QString url);
-    void load(QString type, QStringList urlList);
+    void setType(QString type);
+    void load(QStringList urlList);
+
 //    dataset == 0: test all datasets
-    void test(QString type, int datasetN=0);
+    void test(int datasetN=0);
 
     void testing();
+public slots:
+    void load_finish();
 private:
     QString _booru;
+    QString m_type;
     BooruParser* parser;
 
-    QString testFilename(QString type, int datasetN);
+    Loader* m_loader;
+    QQueue<QString> m_urlList;
+
+    void load_start(QString url);
+
+    QString testFilename(int datasetN);
 };
 
 #endif // BOORUTEST_H

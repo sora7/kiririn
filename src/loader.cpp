@@ -1,116 +1,42 @@
 #include "loader.h"
 
-size_t write_text(char *data, size_t size, size_t nmemb, string *buffer)
+Loader::Loader(QString url, QObject *parent) : QObject(parent)
 {
-  size_t result = 0;
-  if (buffer != NULL)
-  {
-    buffer->append(data, size * nmemb);
-    result = size * nmemb;
-  }
-  return result;
+    connect(&m_WebCtrl,
+            SIGNAL(finished(QNetworkReply*)),
+            this,
+            SLOT(fileDownloaded(QNetworkReply*)));
+
+    QUrl url1(url);
+    QNetworkRequest request(url1);
+    request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.9) Gecko/20100101 Goanna/3.2 Firefox/45.9 PaleMoon/27.2.0");
+    QSslConfiguration sslConfig = QSslConfiguration::defaultConfiguration();
+    sslConfig.setProtocol(QSsl::TlsV1);
+    request.setSslConfiguration(sslConfig);
+    m_WebCtrl.get(request);
 }
 
-size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
-    size_t written = fwrite(ptr, size, nmemb, stream);
-    return written;
-}
-
-Loader::Loader()
+Loader::~Loader()
 {
 }
 
-QString Loader::loadHtml(QString url)
+QByteArray Loader::downloadedData() const
 {
-    // sleep for a random interval between 300 and 700 ms
-    srand(time(NULL));
-    delay(rand_gap(300, 700));
-
-    QString html_text = "";
-
-    char errorBuffer[CURL_ERROR_SIZE];
-
-    CURL *curl;
-    curl = curl_easy_init();
-
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errorBuffer);
-        curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, DEFAULT_UA.c_str());
-        curl_easy_setopt(curl, CURLOPT_HEADER, 0);
-
-        string buffer;
-
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_text);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
-
-        CURLcode result = curl_easy_perform(curl);
-
-        if (result == CURLE_OK) {
-            html_text = QString::fromStdString(buffer);
-        }
-        else {
-            cout << "ERROR " << errorBuffer << endl;
-        }
-    }
-    curl_easy_cleanup(curl);
-
-    return html_text;
+    return m_DownloadedData;
 }
 
-void Loader::loadFile(QString url, QString filename)
+QString Loader::getHtml() const
 {
-    // sleep for a random interval between 300 and 700 ms
-    srand(time(NULL));
-    delay(rand_gap(300, 700));
-
-    char errorBuffer[CURL_ERROR_SIZE];
-
-    CURL *curl;
-    curl = curl_easy_init();
-
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errorBuffer);
-        curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, DEFAULT_UA.c_str());
-        curl_easy_setopt(curl, CURLOPT_HEADER, 0);
-
-        FILE *fp;
-        fp = fopen(filename.toStdString().c_str(), "wb");
-
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-
-        CURLcode result = curl_easy_perform(curl);
-
-        if (result != CURLE_OK) {
-            cout << "ERROR " << errorBuffer << endl;
-        }
-
-        fclose(fp);
-    }
-    curl_easy_cleanup(curl);
+    QString htmlText;
+    htmlText = QTextCodec::codecForMib(106)->toUnicode(m_DownloadedData);
+    return htmlText;
 }
 
-#ifdef DELAY_Q
-void delay(int millisec)
+void Loader::fileDownloaded(QNetworkReply *pReply)
 {
-    QTime wakeTime = QTime::currentTime().addMSecs(millisec);
-    while(QTime::currentTime() < wakeTime) {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
-}
-#endif
-
-#ifdef DELAY_T
-void delay(int millisec) {
-    Sleeper::msleep(millisec);
-}
-#endif
-
-int rand_gap(int from, int to)
-{
-    return rand()%(to - from) + from;
+    m_DownloadedData = pReply->readAll();
+    pReply->deleteLater();
+    cout << "SIGNAL" << endl;
+    emit downloaded();
+    cout << "SIGNAL" << endl;
 }

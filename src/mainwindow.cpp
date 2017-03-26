@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "boorutest.h"
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -40,24 +38,30 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->comboBox_site->addItem("Gelbooru",          QVariant("gelbooru"));
 //    ui->comboBox_site->addItem("Safebooru",         QVariant("safebooru"));
 
+    grabber = new Grabber();
+    tester = new BooruTest();
 
-    ui->tableView_job->setModel(this->grabber.jobModel());
+    ui->tableView_job->setModel(this->grabber->jobModel());
     ui->tableView_job->verticalHeader()->hide();
     ui->tableView_job->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView_job->hideColumn(0);
 
     bindHandlers();
+    defaults();
 }
 
 MainWindow::~MainWindow()
 {
+    delete grabber;
+    delete tester;
+
     delete ui;
 }
 
 void MainWindow::startButtonHandler()
 {
     Job newJob = this->getJobSettings();
-    this->grabber.startNewJob(newJob);
+    this->grabber->startNewJob(newJob);
 }
 
 void MainWindow::stopButtonHandler()
@@ -67,7 +71,7 @@ void MainWindow::stopButtonHandler()
 
 void MainWindow::contButtonHandler()
 {
-    this->grabber.contLastJob();
+    this->grabber->contLastJob();
 }
 
 void MainWindow::progressChange(const int current, const int total)
@@ -158,13 +162,23 @@ void MainWindow::bindHandlers()
             SLOT(contButtonHandler()));
 //    connect(this->grabber, SIGNAL(progressChange(int, int)), this,
 //            SLOT(progressChange(int,int)));
-    connect(&this->grabber, SIGNAL(progressChange(int, int)), this, SLOT(progressChange(int,int)));
-    connect(&this->grabber, SIGNAL(stageChange(GrabberStage)), this, SLOT(stageChange(GrabberStage)));
-    connect(&this->grabber, SIGNAL(logMessage(QString)), this, SLOT(logMessage(QString)));
+    connect(this->grabber, SIGNAL(progressChange(int, int)), this, SLOT(progressChange(int,int)));
+    connect(this->grabber, SIGNAL(stageChange(GrabberStage)), this, SLOT(stageChange(GrabberStage)));
+    connect(this->grabber, SIGNAL(logMessage(QString)), this, SLOT(logMessage(QString)));
 }
 
 void MainWindow::test()
 {
-    BooruTest tester;
-    tester.testing();
+    tester->testing();
+}
+
+void MainWindow::defaults()
+{
+    ui->checkBox_ft_jpg->setChecked(true);
+    ui->checkBox_ft_png->setChecked(true);
+    ui->checkBox_ft_gif->setChecked(true);
+
+    ui->checkBox_pt_resized->setChecked(true);
+    ui->lineEdit_tags->setText("yukinoshita_yukino");
+    ui->lineEdit_savepath->setText("pics");
 }

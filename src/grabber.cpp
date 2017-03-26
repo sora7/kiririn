@@ -3,29 +3,31 @@
 Grabber::Grabber(QObject *parent) :
     QObject(parent)
 {
-    this->jobManager = new JobManager();
+    this->m_jobManager = new JobManager();
 }
 
 Grabber::~Grabber()
 {
-    delete this->jobManager;
+    delete this->m_jobManager;
+//    delete m_loader;
+    delete m_parser;
 }
 
 void Grabber::startNewJob(Job newJob)
 {
-    this->jobManager->addJob(newJob);
+    this->m_jobManager->addJob(newJob);
     this->contLastJob();
 }
 
 void Grabber::contLastJob()
 {
-    Job last = this->jobManager->getLastJob();
+    Job last = this->m_jobManager->getLastJob();
     this->startJob(last);
 }
 
 QSqlTableModel *Grabber::jobModel()
 {
-    return this->jobManager->jobModel();
+    return this->m_jobManager->jobModel();
 }
 
 void Grabber::startJob(Job currJob)
@@ -33,67 +35,45 @@ void Grabber::startJob(Job currJob)
     cout << currJob << endl;
     emit logMessage("Job start");
 
-    BooruParser* parser;
-    QString siteName = currJob.getSite();
-    if (siteName == sankaku::shortname) {
-        parser = new SankakuChannelParser();
-    }
-    if (siteName == idol::shortname) {
-        parser = new IdolComplexParser();
-    }
-    if (siteName == katawa::shortname) {
-        parser = new MishimmieParser();
-    }
-    if (siteName == fourchan::shortname) {
-        parser = new FourChanHouseParser();
-    }
-    if (siteName == konachan::shortname) {
-        parser = new KonachanParser();
-    }
-    if (siteName == yandere::shortname) {
-        parser = new YandeReParser();
-    }
-    if (siteName == danbooru::shortname) {
-        parser = new DanbooruParser();
-    }
-    if (siteName == gelbooru::shortname) {
-        parser = new GelbooruParser();
-    }
-    if (siteName == safebooru::shortname) {
-        parser = new SafebooruParser();
-    }
-    cout << parser->name().toStdString() << endl;
-    emit logMessage("Site: " + parser->name());
+    m_currJob = currJob;
 
-    this->_picNamer.setPattern(currJob.getFilenameTemplate());
-    this->_picNamer.setPicsPath(currJob.getSavePath());
+    selectParser(m_currJob.getSite());
 
-    switch (currJob.getStatus()) {
+    this->m_picNamer.setPattern(m_currJob.getFilenameTemplate());
+    this->m_picNamer.setPicsPath(m_currJob.getSavePath());
+
+    switch (m_currJob.getStatus()) {
     case READY: {
-        QString initialUrl = parser->genQueryUrl(currJob.getTags());
+        QString initialUrl = m_parser->genQueryUrl(m_currJob.getTags());
+        cout << "QUERY: " << initialUrl.toStdString() << endl;
 
-        this->jobManager->updSearch(initialUrl, currJob.getId());
-        this->jobManager->updStatus(SEARCH_START, currJob.getId());
+        this->m_jobManager->updSearch(initialUrl, m_currJob.getId());
+        this->m_jobManager->updStatus(SEARCH_START, m_currJob.getId());
 
-        currJob.setLastSearchUrl(initialUrl);
-        currJob.setStatus(SEARCH_START);
+        m_currJob.setLastSearchUrl(initialUrl);
+        m_currJob.setStatus(SEARCH_START);
+
+        this->searchProcess(m_currJob.getLastSearchUrl());
+        break;
     }
     case SEARCH_START: {
         emit logMessage("Search processing start");
-        this->searchProcess(currJob.getLastSearchUrl(), parser, currJob.getId());
+        this->searchProcess(m_currJob.getLastSearchUrl());
+        break;
     }
     case SEARCH_DONE: {
-        this->postsProcess(parser, currJob);
+        this->postsProcess();
+        break;
     }
     case POSTS_DONE: {
-        this->picsDownload(currJob.getId());
+        this->picsDownload();
+        break;
     }
     case PICS_DONE: {
         cout << "ALL DONE!" << endl;
         emit logMessage("Job finish");
     }
     }
-    delete parser;
 /*
     if (!currJob.search_done) {
         if (currJob.lastSearchUrl == Job::INITIAL_URL) {
@@ -113,105 +93,202 @@ void Grabber::startJob(Job currJob)
 */
 }
 
-void Grabber::searchProcess(QString searchUrl, BooruParser *parser, int jobID)
+void Grabber::selectParser(QString siteName)
+{
+    //    BooruParser* parser;
+    if (siteName == sankaku::shortname) {
+        m_parser = new SankakuChannelParser();
+    }
+    if (siteName == idol::shortname) {
+        m_parser = new IdolComplexParser();
+    }
+    if (siteName == katawa::shortname) {
+        m_parser = new MishimmieParser();
+    }
+    if (siteName == fourchan::shortname) {
+        m_parser = new FourChanHouseParser();
+    }
+    if (siteName == konachan::shortname) {
+        m_parser = new KonachanParser();
+    }
+    if (siteName == yandere::shortname) {
+        m_parser = new YandeReParser();
+    }
+    if (siteName == danbooru::shortname) {
+        m_parser = new DanbooruParser();
+    }
+    if (siteName == gelbooru::shortname) {
+        m_parser = new GelbooruParser();
+    }
+    if (siteName == safebooru::shortname) {
+        m_parser = new SafebooruParser();
+    }
+    cout << m_parser->name().toStdString() << endl;
+    emit logMessage("Site: " + m_parser->name());
+}
+
+void Grabber::searchProcess(QString searchUrl)
 {
     cout << "SEARCH PROCESS\tURL: " << searchUrl.toStdString() << endl;
     emit logMessage("Search url: " + searchUrl);
     emit stageChange(SEARCH);
 
-    Loader loader;
-    QString htmlText = loader.loadHtml(searchUrl);
+    searchProcessStart(searchUrl);
+}
 
-    SearchInfo searchInfo = parser->parseSearch(htmlText);
+void Grabber::searchProcessStart(QString searchUrl)
+{
+    m_loader = new Loader(searchUrl);
+    cout << "LOADER" << endl;
+    connect(m_loader,
+            SIGNAL(downloaded()),
+            this, SLOT(searchProcessFinish())
+            );
+}
+
+void Grabber::searchProcessFinish()
+{
+    cout << "Search Finish" << endl;
+    QString htmlText = m_loader->getHtml();
+//    delete m_loader;
+    cout << htmlText.toStdString().substr(0, 500) << endl;
+
+    SearchInfo searchInfo = m_parser->parseSearch(htmlText);
+    cout << searchInfo << endl;
     emit logMessage(QString::number(searchInfo.getPosts().length())
                     + " posts found");
-    this->jobManager->addPosts(searchInfo.getPosts(), jobID);
+    this->m_jobManager->addPosts(searchInfo.getPosts(), m_currJob.getId());
 
     if (searchInfo.hasNext()) {
         QString newSearchUrl = searchInfo.nextPage();
 
-        this->jobManager->updSearch(newSearchUrl, jobID);
+        this->m_jobManager->updSearch(newSearchUrl, m_currJob.getId());
 
-        this->searchProcess(newSearchUrl, parser, jobID);
+        this->searchProcessStart(newSearchUrl);
     }
     else {
-        this->jobManager->updStatus(SEARCH_DONE, jobID);
+        this->m_jobManager->updStatus(SEARCH_DONE, m_currJob.getId());
         emit logMessage("Search processing finish");
+        postsProcess();
     }
 }
 
-void Grabber::postsProcess(BooruParser* parser, Job currJob)
+void Grabber::postsProcess()
 {
     cout << "POSTS PROCESS" << endl;
     emit logMessage("Post processing start");
     emit stageChange(POST);
 
-    QList<PostInfo> postList = this->jobManager->readPosts(currJob.getId());
-    emit logMessage("Count: " + QString::number(postList.length()));
+    m_posts.append(this->m_jobManager->readPosts(m_currJob.getId()));
+    emit logMessage("Count: " + QString::number(m_posts.length()));
 
-    Loader loader;
-    for (int i = 0; i < postList.count(); i++) {
-        QString postUrl = postList.at(i).getUrl();
-        emit logMessage("post url: " + postUrl);
-
-        QString postHtml = loader.loadHtml(postUrl);
-        PostInfo postInfo = parser->parsePost(postHtml);
-//        cout << postInfo << endl;
-        if (
-                (currJob.okRating(postInfo.getRating())) ||
-                (currJob.okRating(RT_OTHER))
-            )
-        {
-            QList<PicInfo> picList = postInfo.getPics();
-            QList<PicInfo> okList;
-            for (int j = 0; j < picList.count(); j++) {
-                PicInfo picInfo = picList.at(j);
-                if (
-                        ( currJob.okType(picInfo.getType()) ) &&
-                        ( currJob.okFormat(picInfo.getFormat()) )
-                    )
-                {
-                    //name?
-                    picInfo.setName(
-                                this->_picNamer.checkName(picInfo.getName())
-                                );
-                    okList << picInfo;
-                }
-            }
-            emit logMessage(QString::number(okList.length()) + " pics added");
-            this->jobManager->addPics(okList, currJob.getId());
-            this->jobManager->postDone(postList.at(i).getId());
-        }
-        emit progressChange(i+1, postList.count());
+    if (!m_posts.isEmpty()) {
+        m_currPost = m_posts.dequeue();
+        postProcessStart();
     }
-    this->jobManager->updStatus(POSTS_DONE, currJob.getId());
-    cout << "POSTS FINISH" << endl;
-    emit logMessage("Post processing finish");
 }
 
-void Grabber::picsDownload(int jobID)
+void Grabber::postProcessStart()
+{
+    QString postUrl = m_currPost.getUrl();
+
+    emit logMessage("post url: " + postUrl);
+    m_loader = new Loader(postUrl);
+    connect(m_loader,
+            SIGNAL(downloaded()),
+            this, SLOT(postProcessFinish())
+            );
+}
+
+void Grabber::postProcessFinish()
+{
+//    Job currJob = m_jobManager->getJob(m_jobID);
+
+    QString postHtml = m_loader->getHtml();
+    PostInfo postInfo = m_parser->parsePost(postHtml);
+    if (
+            (m_currJob.okRating(postInfo.getRating())) ||
+            (m_currJob.okRating(RT_OTHER))
+            )
+    {
+        QList<PicInfo> picList = postInfo.getPics();
+        QList<PicInfo> okList;
+        for (int j = 0; j < picList.count(); j++) {
+            PicInfo picInfo = picList.at(j);
+            if (
+                    ( m_currJob.okType(picInfo.getType()) ) &&
+                    ( m_currJob.okFormat(picInfo.getFormat()) )
+                    )
+            {
+                //name?
+                picInfo.setName(
+                            this->m_picNamer.checkName(picInfo.getName())
+                            );
+                okList << picInfo;
+            }
+        }
+        emit logMessage(QString::number(okList.length()) + " pics added");
+        this->m_jobManager->addPics(okList, m_currJob.getId());
+        this->m_jobManager->postDone(m_currPost.getId());
+    }
+//    emit progressChange(i+1, postList.count());
+
+    if (m_posts.isEmpty()) {
+        this->m_jobManager->updStatus(POSTS_DONE, m_currJob.getId());
+        cout << "POSTS FINISH" << endl;
+        emit logMessage("Post processing finish");
+        picsDownload();
+    }
+    else {
+        m_currPost = m_posts.dequeue();
+        postProcessStart();
+    }
+}
+
+void Grabber::picsDownload()
 {
     cout << "PICS DOWNLOAD" << endl;
     emit logMessage("Pics download start");
     emit stageChange(DOWNLOAD);
 
-    QList<PicInfo> picList = this->jobManager->readPics(jobID);
-    Loader loader;
-    for (int i = 0; i < picList.count(); i++) {
-        PicInfo picInfo = picList.at(i);
+    m_pics.append(this->m_jobManager->readPics(m_currJob.getId()));
+    emit logMessage("Count: " + QString::number(m_pics.length()));
 
-        cout << "LOAD #" << i+1 << endl;
-        emit logMessage("Download pic #" + QString::number(i+1));
-
-        cout << picInfo.getName().toStdString() << endl;
-//        cout << picInfo.getUrl().toStdString() << endl;
-
-        loader.loadFile(picInfo.getUrl(), picInfo.getName());
-        this->jobManager->picDone(picInfo.getId());
-
-        emit progressChange(i+1, picList.count());
+    if (!m_pics.isEmpty()) {
+        m_currPic = m_pics.dequeue();
+        picDownloadStart();
     }
-    this->jobManager->updStatus(PICS_DONE, jobID);
-    cout << "DOWNLOAD COMPLETE" << endl;
-    emit logMessage("Pic download complete");
+}
+
+void Grabber::picDownloadStart()
+{
+    QString picUrl = m_currPic.getUrl();
+
+    emit logMessage("pic url: " + picUrl);
+//    emit logMessage("Download pic #" + QString::number(i+1));
+    m_loader = new Loader(picUrl);
+    connect(m_loader,
+            SIGNAL(downloaded()),
+            this, SLOT(picDownloadFinish())
+            );
+}
+
+void Grabber::picDownloadFinish()
+{
+    QFile file(m_currPic.getName());
+    file.open(QIODevice::WriteOnly);
+    file.write(m_loader->downloadedData());
+    file.close();
+
+    this->m_jobManager->picDone(m_currPic.getId());
+
+    if (!m_pics.isEmpty()) {
+        m_currPic = m_pics.dequeue();
+        picDownloadStart();
+    }
+    else {
+        this->m_jobManager->updStatus(PICS_DONE, m_currJob.getId());
+        cout << "DOWNLOAD COMPLETE" << endl;
+        emit logMessage("Pic download complete");
+    }
 }

@@ -6,6 +6,7 @@
 #include "loader.h"
 #include "grabber.h"
 #include "items/job.h"
+#include "boorutest.h"
 
 #include <QMainWindow>
 
@@ -36,11 +37,13 @@ private:
     Job getJobSettings();
 
     Ui::MainWindow *ui;
-    Grabber grabber;
+    Grabber* grabber;
+    BooruTest* tester;
 
     void bindHandlers();
 
     void test();
+    void defaults();
 };
 
 #endif // MAINWINDOW_H

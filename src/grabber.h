@@ -44,16 +44,34 @@ signals:
     void stageChange(GrabberStage stage);
     void progressChange(int current, int total);
     void logMessage(QString messageText);
+private slots:
+    void searchProcessStart(QString searchUrl);
+    void searchProcessFinish();
+
+    void postProcessStart();
+    void postProcessFinish();
+
+    void picDownloadStart();
+    void picDownloadFinish();
 private:
-    JobManager* jobManager;
-    Job _currentJob;
-    PicNamer _picNamer;
+    JobManager* m_jobManager;
+    BooruParser* m_parser;
+    PicNamer m_picNamer;
+    Loader* m_loader;
+
+    Job m_currJob;
+    PostInfo m_currPost;
+    PicInfo m_currPic;
+
+    QQueue<PostInfo> m_posts;
+    QQueue<PicInfo> m_pics;
 
     void startJob(Job currJob);
+    void selectParser(QString siteName);
 
-    void searchProcess(QString searchUrl, BooruParser* parser, int jobID);
-    void postsProcess(BooruParser *parser, Job currJob);
-    void picsDownload(int jobID);
+    void searchProcess(QString searchUrl);
+    void postsProcess();
+    void picsDownload();
 };
 
 #endif // GRABBER_H

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql network
 
 TARGET = kiririn
 TEMPLATE = app
@@ -59,5 +59,5 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-LIBS += ../build/libcurl.dll
+#LIBS += ../build/libcurl.dll
 
