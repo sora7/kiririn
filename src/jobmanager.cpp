@@ -17,9 +17,8 @@ JobManager::JobManager()
 
 JobManager::~JobManager()
 {
-    delete this->_jobModel;
-
     this->_job_db.close();
+    delete this->_jobModel;
 }
 
 QSqlTableModel *JobManager::jobModel()

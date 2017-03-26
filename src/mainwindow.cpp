@@ -54,8 +54,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
 
-    delete grabber;
-    delete tester;
+//    delete grabber;
+//    delete tester;
 }
 
 void MainWindow::startButtonHandler()
