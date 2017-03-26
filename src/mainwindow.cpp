@@ -52,10 +52,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete ui;
+
     delete grabber;
     delete tester;
-
-    delete ui;
 }
 
 void MainWindow::startButtonHandler()

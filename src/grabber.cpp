@@ -151,10 +151,10 @@ void Grabber::searchProcessFinish()
     cout << "Search Finish" << endl;
     QString htmlText = m_loader->getHtml();
 //    delete m_loader;
-    cout << htmlText.toStdString().substr(0, 500) << endl;
+//    cout << htmlText.toStdString().substr(0, 500) << endl;
 
     SearchInfo searchInfo = m_parser->parseSearch(htmlText);
-    cout << searchInfo << endl;
+//    cout << searchInfo << endl;
     emit logMessage(QString::number(searchInfo.getPosts().length())
                     + " posts found");
     this->m_jobManager->addPosts(searchInfo.getPosts(), m_currJob.getId());

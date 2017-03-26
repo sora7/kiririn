@@ -20,7 +20,7 @@ class Loader : public QObject
 {
     Q_OBJECT
 public:
-    explicit Loader(QString url, QObject *parent = 0);
+    explicit Loader(QUrl url, QObject *parent = 0);
     virtual ~Loader();
     QByteArray downloadedData() const;
     QString getHtml() const;
@@ -29,6 +29,7 @@ signals:
 
 private slots:
     void fileDownloaded(QNetworkReply* pReply);
+    void onSslErrors(QNetworkReply* pReply, const QList<QSslError> &lst);
 
 private:
     QNetworkAccessManager m_WebCtrl;
