@@ -11,6 +11,24 @@
 
 using namespace std;
 
+//struct booru_data {
+//    QString http_prefix;
+//    QString site_url;
+//    QString query_prefix;
+//    QString query_tag_sep;
+//    QString query_suffix;
+//    int tags_max;
+
+//    QString rx_next;
+//    QString rx_post;
+
+//    QString rx_orig;
+//    QString rx_orig2;
+//    QString rx_resize;
+
+//    QString rx_rating;
+//};
+
 class BooruParser
 {
 public:
@@ -32,6 +50,14 @@ protected:
     QString _query_tag_sep;
     QString _query_suffix;
     int _tags_max;
+
+    void setNext(QString nextRegexStr);
+    void setPost(QString postRegexStr);
+
+    void setOrig(QString origRegexStr);
+    void setResize(QString resizeRegexStr);
+
+    void setRating(QString ratingRegexStr);
 
     QRegExp _rxNextPage;
     QRegExp _rxPost;
@@ -59,16 +85,19 @@ protected:
     Liste:
 
     Danbooru-alike:
-        SankakuChannel  *
-        IdolComplex     *
-        Konachan        *
-        Yande.re
-        Safebooru
-        Danbooru
-        Gelbooru
+        SankakuChannel      *
+        IdolComplex         *
+        Konachan            *
+        Yande.re            *
+        Safebooru           *
+        Danbooru            *
+        Gelbooru            *
+        Zerochan
+        Minitokyo
+        kpop.asiachan.com
     Shimmie-alike:
-        Mishimmie       *
-        4chanhouse      *
+        Mishimmie           *   ' '
+        4chanhouse          *   '+'
     Other:
-        favim.ru
+        favim.ru                ',' as tag separator '+' as whitespace
 */

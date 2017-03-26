@@ -58,6 +58,36 @@ QString BooruParser::genQueryUrl(QStringList tags)
     return queryUrl;
 }
 
+void BooruParser::setNext(QString nextRegexStr)
+{
+    this->_rxNextPage = QRegExp(nextRegexStr);
+    this->_rxNextPage.setMinimal(true);
+}
+
+void BooruParser::setPost(QString postRegexStr)
+{
+    this->_rxPost = QRegExp(postRegexStr);
+    this->_rxPost.setMinimal(true);
+}
+
+void BooruParser::setOrig(QString origRegexStr)
+{
+    this->_rxOrig = QRegExp(origRegexStr);
+    this->_rxOrig.setMinimal(true);
+}
+
+void BooruParser::setResize(QString resizeRegexStr)
+{
+    this->_rxResize = QRegExp(resizeRegexStr);
+    this->_rxResize.setMinimal(true);
+}
+
+void BooruParser::setRating(QString ratingRegexStr)
+{
+    this->_rxRating = QRegExp(ratingRegexStr);
+    this->_rxRating.setMinimal(true);
+}
+
 PicFormat BooruParser::checkFormat(QString str)
 {
     if (str == "jpg") {

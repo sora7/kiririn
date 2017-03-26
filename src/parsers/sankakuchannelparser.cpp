@@ -8,12 +8,14 @@ SankakuChannelParser::SankakuChannelParser()
     QString orig = "Original: <a href=\"//(cs.sankakucomplex.com/data/"
                    "[a-z0-9]{2}/[a-z0-9]{2}/([a-z0-9]{32}."
                    "([a-z0-9]{3,4}))\\?[0-9]+)\".+>";
-    this->_rxOrig = QRegExp(orig);
+    this->setOrig(orig);
+//    this->_rxOrig = QRegExp(orig);
 //    <li>Resized: <a href="//cs.sankakucomplex.com/data/sample/a5/3b/sample-a53b563b373665e84d300c701067c4f0.jpg?3595399" id=lowres>690x1000</a></li>
     QString resize = "Resized: <a href=\"//(cs.sankakucomplex.com/data/sample/"
                      "[a-z0-9]{2}/[a-z0-9]{2}/(sample-[a-z0-9]{32}."
                      "([a-z0-9]{3,4}))\\?[0-9]+)\".+>";
-    this->_rxResize = QRegExp(resize);
+    this->setResize(resize);
+//    this->_rxResize = QRegExp(resize);
 }
 
 SankakuChannelParser::~SankakuChannelParser()

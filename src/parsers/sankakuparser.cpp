@@ -11,14 +11,20 @@ SankakuParser::SankakuParser()
 
     this->_rxPopular  = QRegExp("id=more-popular-link>");
 
-    this->_rxNextPage = QRegExp("next-page-url=\"([^ ]*)\"");
-    this->_rxNextPage.setMinimal(true);
-    this->_rxPost     = QRegExp("><a href=\"(/post/show/\\d*)\"");
-    this->_rxPost.setMinimal(true);
+    QString next = "next-page-url=\"([^ ]*)\"";
+    this->setNext(next);
+//    this->_rxNextPage = QRegExp(next);
+//    this->_rxNextPage.setMinimal(true);
+    QString post = "><a href=\"(/post/show/\\d*)\"";
+    this->setPost(post);
+//    this->_rxPost = QRegExp(post);
+//    this->_rxPost.setMinimal(true);
 //    <li>Rating: Safe</li>
 //    <li>Rating: Questionable</li>
 //    <li>Rating: Explicit</li>
-    this->_rxRating   = QRegExp("<li>Rating: (Safe|Questionable|Explicit)</li>");
+    QString rating = "<li>Rating: (Safe|Questionable|Explicit)</li>";
+//    this->_rxRating = QRegExp(rating);
+    this->setRating(rating);
 }
 
 SankakuParser::~SankakuParser()
@@ -37,7 +43,10 @@ QStringList SankakuParser::getPosts(QString htmlText)
     }
 
     QString prefix = this->_http_prefix + this->_site_url;
-    QStringList postsList = findall(htmlText, this->_rxPost, position_popular, prefix);
+    QStringList postsList = findall(htmlText,
+                                    this->_rxPost,
+                                    position_popular,
+                                    prefix);
 
     return postsList;
 }
