@@ -70,21 +70,21 @@ public:
     void setTryMax(int value);
 
 private:
-    int _id;
-    QString _site;
-    QStringList _tags;
-    QString _savePath;
+    int m_id;
+    QString m_site;
+    QStringList m_tags;
+    QString m_savePath;
 
-    QSet<PicType> _pic_types;
-    QSet<PostRating> _rating;
-    QSet<PicFormat> _file_types;
+    QSet<PicType> m_pic_types;
+    QSet<PostRating> m_rating;
+    QSet<PicFormat> m_file_types;
 
-    QString _lastSearchUrl;
+    QString m_lastSearchUrl;
 
-    QString _filenameTemplate;
-    int _tryMax;
+    QString m_filenameTemplate;
+    int m_tryMax;
 
-    JobStatus _status;
+    JobStatus m_status;
 };
 
 #endif // JOB_H

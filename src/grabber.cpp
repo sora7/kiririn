@@ -4,13 +4,18 @@ Grabber::Grabber(QObject *parent) :
     QObject(parent)
 {
     this->m_jobManager = new JobManager();
+    m_parser = NULL;
 }
 
 Grabber::~Grabber()
 {
     delete this->m_jobManager;
+
 //    delete m_loader;
-    delete m_parser;
+
+    if (m_parser) {
+        delete m_parser;
+    }
 }
 
 void Grabber::startNewJob(Job newJob)
@@ -21,8 +26,8 @@ void Grabber::startNewJob(Job newJob)
 
 void Grabber::contLastJob()
 {
-    Job last = this->m_jobManager->getLastJob();
-    this->startJob(last);
+    m_currJob = this->m_jobManager->getLastJob();
+    this->startJob();
 }
 
 QSqlTableModel *Grabber::jobModel()
@@ -30,12 +35,12 @@ QSqlTableModel *Grabber::jobModel()
     return this->m_jobManager->jobModel();
 }
 
-void Grabber::startJob(Job currJob)
+void Grabber::startJob(/*Job currJob*/)
 {
-    cout << currJob << endl;
+//    cout << currJob << endl;
     emit logMessage("Job start");
 
-    m_currJob = currJob;
+//    m_currJob = currJob;
 
     selectParser(m_currJob.getSite());
 
@@ -45,7 +50,7 @@ void Grabber::startJob(Job currJob)
     switch (m_currJob.getStatus()) {
     case READY: {
         QString initialUrl = m_parser->genQueryUrl(m_currJob.getTags());
-        cout << "QUERY: " << initialUrl.toStdString() << endl;
+//        cout << "QUERY: " << initialUrl.toStdString() << endl;
 
         this->m_jobManager->updSearch(initialUrl, m_currJob.getId());
         this->m_jobManager->updStatus(SEARCH_START, m_currJob.getId());
@@ -72,6 +77,7 @@ void Grabber::startJob(Job currJob)
     case PICS_DONE: {
         cout << "ALL DONE!" << endl;
         emit logMessage("Job finish");
+        break;
     }
     }
 /*
@@ -123,7 +129,7 @@ void Grabber::selectParser(QString siteName)
     if (siteName == safebooru::shortname) {
         m_parser = new SafebooruParser();
     }
-    cout << m_parser->name().toStdString() << endl;
+    cout << "Site: " << m_parser->name().toStdString() << endl;
     emit logMessage("Site: " + m_parser->name());
 }
 
@@ -139,10 +145,11 @@ void Grabber::searchProcess(QString searchUrl)
 void Grabber::searchProcessStart(QString searchUrl)
 {
     m_loader = new Loader(searchUrl);
-    cout << "LOADER" << endl;
+//    cout << "LOADER" << endl;
     connect(m_loader,
             SIGNAL(downloaded()),
-            this, SLOT(searchProcessFinish())
+            this,
+            SLOT(searchProcessFinish())
             );
 }
 
@@ -196,7 +203,8 @@ void Grabber::postProcessStart()
     m_loader = new Loader(postUrl);
     connect(m_loader,
             SIGNAL(downloaded()),
-            this, SLOT(postProcessFinish())
+            this,
+            SLOT(postProcessFinish())
             );
 }
 
@@ -269,7 +277,8 @@ void Grabber::picDownloadStart()
     m_loader = new Loader(picUrl);
     connect(m_loader,
             SIGNAL(downloaded()),
-            this, SLOT(picDownloadFinish())
+            this,
+            SLOT(picDownloadFinish())
             );
 }
 

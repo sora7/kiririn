@@ -18,8 +18,8 @@ public:
 
     QString checkName(const QString oldPicName) const;
 private:
-    QString _pattern;
-    QString _picsPath;
+    QString m_pattern;
+    QString m_picsPath;
 };
 
 #endif // PICNAMER_H

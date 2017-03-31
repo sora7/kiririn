@@ -2,12 +2,12 @@
 
 SankakuParser::SankakuParser()
 {
-    this->_http_prefix = "https://";
+    this->m_http_prefix = "https://";
 
-    this->_query_prefix = "/?tags=";
-    this->_query_tag_sep = "+";
-    this->_query_suffix = "&commit=Search";
-    this->_tags_max = 4;
+    this->m_query_prefix = "/?tags=";
+    this->m_query_tag_sep = "+";
+    this->m_query_suffix = "&commit=Search";
+    this->m_tags_max = 4;
 
     this->_rxPopular  = QRegExp("id=more-popular-link>");
 
@@ -42,9 +42,9 @@ QStringList SankakuParser::getPosts(QString htmlText)
         position_popular = 0;
     }
 
-    QString prefix = this->_http_prefix + this->_site_url;
+    QString prefix = this->m_http_prefix + this->m_site_url;
     QStringList postsList = findall(htmlText,
-                                    this->_rxPost,
+                                    this->m_rxPost,
                                     position_popular,
                                     prefix);
 

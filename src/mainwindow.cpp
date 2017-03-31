@@ -38,10 +38,10 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->comboBox_site->addItem("Gelbooru",          QVariant("gelbooru"));
 //    ui->comboBox_site->addItem("Safebooru",         QVariant("safebooru"));
 
-    grabber = new Grabber();
-    tester = new BooruTest();
+    m_grabber = new Grabber(this);
+    m_tester = new BooruTest(this);
 
-    ui->tableView_job->setModel(this->grabber->jobModel());
+    ui->tableView_job->setModel(this->m_grabber->jobModel());
     ui->tableView_job->verticalHeader()->hide();
     ui->tableView_job->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView_job->hideColumn(0);
@@ -54,14 +54,17 @@ MainWindow::~MainWindow()
 {
     delete ui;
 
-//    delete grabber;
-//    delete tester;
+//    if (m_grabber != 0) {
+//        delete m_grabber;
+//    }
+
+//    delete m_tester;
 }
 
 void MainWindow::startButtonHandler()
 {
     Job newJob = this->getJobSettings();
-    this->grabber->startNewJob(newJob);
+    this->m_grabber->startNewJob(newJob);
 }
 
 void MainWindow::stopButtonHandler()
@@ -71,7 +74,7 @@ void MainWindow::stopButtonHandler()
 
 void MainWindow::contButtonHandler()
 {
-    this->grabber->contLastJob();
+    this->m_grabber->contLastJob();
 }
 
 void MainWindow::progressChange(const int current, const int total)
@@ -162,14 +165,14 @@ void MainWindow::bindHandlers()
             SLOT(contButtonHandler()));
 //    connect(this->grabber, SIGNAL(progressChange(int, int)), this,
 //            SLOT(progressChange(int,int)));
-    connect(this->grabber, SIGNAL(progressChange(int, int)), this, SLOT(progressChange(int,int)));
-    connect(this->grabber, SIGNAL(stageChange(GrabberStage)), this, SLOT(stageChange(GrabberStage)));
-    connect(this->grabber, SIGNAL(logMessage(QString)), this, SLOT(logMessage(QString)));
+    connect(this->m_grabber, SIGNAL(progressChange(int, int)), this, SLOT(progressChange(int,int)));
+    connect(this->m_grabber, SIGNAL(stageChange(GrabberStage)), this, SLOT(stageChange(GrabberStage)));
+    connect(this->m_grabber, SIGNAL(logMessage(QString)), this, SLOT(logMessage(QString)));
 }
 
 void MainWindow::test()
 {
-    tester->testing();
+    m_tester->testing();
 }
 
 void MainWindow::defaults()

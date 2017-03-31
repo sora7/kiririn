@@ -4,26 +4,27 @@ const QString JobManager::DB_PATH = QString("jobs.sqlite");
 
 JobManager::JobManager()
 {
-    this->_job_db = QSqlDatabase::addDatabase("QSQLITE");
-    this->_job_db.setDatabaseName(this->DB_PATH);
-    this->_job_db.open();
+    this->m_job_db = QSqlDatabase::addDatabase("QSQLITE");
+    this->m_job_db.setDatabaseName(this->DB_PATH);
+    this->m_job_db.open();
 
     this->checkTables();
 
-    this->_jobModel = new QSqlTableModel();
-    this->_jobModel->setTable("jobs");
-    this->_jobModel->select();
+    this->m_jobModel = new QSqlTableModel();
+    this->m_jobModel->setTable("jobs");
+    this->m_jobModel->select();
 }
 
 JobManager::~JobManager()
 {
-    this->_job_db.close();
-    delete this->_jobModel;
+    delete this->m_jobModel;
+    this->m_job_db.close();
+//    this->m_job_db.removeDatabase(QString());
 }
 
 QSqlTableModel *JobManager::jobModel()
 {
-    return this->_jobModel;
+    return this->m_jobModel;
 }
 
 void JobManager::checkTables()
@@ -77,6 +78,7 @@ void JobManager::checkTables()
                           "`filename` INTEGER NOT NULL);";
         checkQuery.exec(jobsSql);
     }
+    checkQuery.finish();
 }
 
 void JobManager::addJob(Job job)
@@ -122,7 +124,6 @@ Job JobManager::getJob(int jobID)
     QSqlQuery selectQuery(QSqlDatabase::database());
     QString selectString = "SELECT * FROM jobs WHERE JobID = %1";
     selectString = selectString.arg(jobID);
-
     selectQuery.exec(selectString);
 
     QSqlRecord rec = selectQuery.record();

@@ -42,50 +42,50 @@ QString BooruParser::readFile(QString filename)
 
 QString BooruParser::genQueryUrl(QStringList tags)
 {
-    QString queryUrl = this->_http_prefix + this->_site_url + this->_query_prefix;
+    QString queryUrl = this->m_http_prefix + this->m_site_url + this->m_query_prefix;
 
     QStringList slice;
-    if (this->_tags_max > 0) {
-        slice = tags.mid(0, this->_tags_max);
+    if (this->m_tags_max > 0) {
+        slice = tags.mid(0, this->m_tags_max);
     }
     else {
         slice = tags;
     }
-    queryUrl += slice.join(this->_query_tag_sep);
+    queryUrl += slice.join(this->m_query_tag_sep);
 
-    queryUrl += this->_query_suffix;
+    queryUrl += this->m_query_suffix;
 
     return queryUrl;
 }
 
 void BooruParser::setNext(QString nextRegexStr)
 {
-    this->_rxNextPage = QRegExp(nextRegexStr);
-    this->_rxNextPage.setMinimal(true);
+    this->m_rxNextPage = QRegExp(nextRegexStr);
+    this->m_rxNextPage.setMinimal(true);
 }
 
 void BooruParser::setPost(QString postRegexStr)
 {
-    this->_rxPost = QRegExp(postRegexStr);
-    this->_rxPost.setMinimal(true);
+    this->m_rxPost = QRegExp(postRegexStr);
+    this->m_rxPost.setMinimal(true);
 }
 
 void BooruParser::setOrig(QString origRegexStr)
 {
-    this->_rxOrig = QRegExp(origRegexStr);
-    this->_rxOrig.setMinimal(true);
+    this->m_rxOrig = QRegExp(origRegexStr);
+    this->m_rxOrig.setMinimal(true);
 }
 
 void BooruParser::setResize(QString resizeRegexStr)
 {
-    this->_rxResize = QRegExp(resizeRegexStr);
-    this->_rxResize.setMinimal(true);
+    this->m_rxResize = QRegExp(resizeRegexStr);
+    this->m_rxResize.setMinimal(true);
 }
 
 void BooruParser::setRating(QString ratingRegexStr)
 {
-    this->_rxRating = QRegExp(ratingRegexStr);
-    this->_rxRating.setMinimal(true);
+    this->m_rxRating = QRegExp(ratingRegexStr);
+    this->m_rxRating.setMinimal(true);
 }
 
 PicFormat BooruParser::checkFormat(QString str)
@@ -115,10 +115,10 @@ QString BooruParser::getNextPage(QString htmlText)
 {
     QString nextPage;
 
-    int pos = this->_rxNextPage.indexIn(htmlText);
+    int pos = this->m_rxNextPage.indexIn(htmlText);
     if (pos > -1) {
-        QString nextFound = this->_rxNextPage.cap(1);
-        nextPage = this->_http_prefix + this->_site_url + nextFound;
+        QString nextFound = this->m_rxNextPage.cap(1);
+        nextPage = this->m_http_prefix + this->m_site_url + nextFound;
     }
 
     return nextPage;
@@ -126,8 +126,8 @@ QString BooruParser::getNextPage(QString htmlText)
 
 QStringList BooruParser::getPosts(QString htmlText)
 {
-    QString prefix = this->_http_prefix + this->_site_url;
-    QStringList postsList = findall(htmlText, this->_rxPost, 0, prefix);
+    QString prefix = this->m_http_prefix + this->m_site_url;
+    QStringList postsList = findall(htmlText, this->m_rxPost, 0, prefix);
 
     return postsList;
 }
@@ -136,34 +136,34 @@ QList<PicInfo> BooruParser::getPics(QString htmlText)
 {
     QList<PicInfo> pics;
 
-    this->_rxOrig.setMinimal(true);//lazy quantifiers, qt you suck
-    int pos = this->_rxOrig.indexIn(htmlText);
+    this->m_rxOrig.setMinimal(true);//lazy quantifiers, qt you suck
+    int pos = this->m_rxOrig.indexIn(htmlText);
     if (pos > -1) {
-        QString origUrl  = this->_rxOrig.cap(1);
-        QString origName = this->_rxOrig.cap(2);
-        QString origExt  = this->_rxOrig.cap(3);
+        QString origUrl  = this->m_rxOrig.cap(1);
+        QString origName = this->m_rxOrig.cap(2);
+        QString origExt  = this->m_rxOrig.cap(3);
 
         PicInfo picInfo;
         picInfo.setType(ORIGINAL);
         picInfo.setName(origName);
         picInfo.setFormat( checkFormat( origExt ) );
-        picInfo.setUrl( this->_http_prefix + origUrl );
+        picInfo.setUrl( this->m_http_prefix + origUrl );
 
         pics << picInfo;
     }
 
-    this->_rxResize.setMinimal(true);
-    pos = this->_rxResize.indexIn(htmlText);
+    this->m_rxResize.setMinimal(true);
+    pos = this->m_rxResize.indexIn(htmlText);
     if (pos > -1) {
-        QString resUrl  = this->_rxResize.cap(1);
-        QString resName = this->_rxResize.cap(2);
-        QString resExt  = this->_rxResize.cap(3);
+        QString resUrl  = this->m_rxResize.cap(1);
+        QString resName = this->m_rxResize.cap(2);
+        QString resExt  = this->m_rxResize.cap(3);
 
         PicInfo picInfo2;
         picInfo2.setType(RESIZED);
         picInfo2.setName(resName);
         picInfo2.setFormat( checkFormat( resExt ) );
-        picInfo2.setUrl( this->_http_prefix + resUrl );
+        picInfo2.setUrl( this->m_http_prefix + resUrl );
 
         pics << picInfo2;
     }
@@ -175,15 +175,15 @@ PostRating BooruParser::getRating(QString htmlText)
 //    <li>Rating: Safe</li>
 //    <li>Rating: Questionable</li>
 //    <li>Rating: Explicit</li>
-    int pos = this->_rxRating.indexIn(htmlText);
+    int pos = this->m_rxRating.indexIn(htmlText);
     if (pos > -1) {
-        if (this->_rxRating.cap(1) == "Safe"){
+        if (this->m_rxRating.cap(1) == "Safe"){
             return SAFE;
         }
-        if (this->_rxRating.cap(1) == "Questionable"){
+        if (this->m_rxRating.cap(1) == "Questionable"){
             return QUESTIONABLE;
         }
-        if (this->_rxRating.cap(1) == "Explicit"){
+        if (this->m_rxRating.cap(1) == "Explicit"){
             return EXPLICIT;
         }
     }

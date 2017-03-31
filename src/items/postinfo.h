@@ -37,11 +37,11 @@ public:
     void setId(int value);
 
 private:
-    int _id;
-    QString _url;
+    int m_id;
+    QString m_url;
 
-    PostRating _rating;
-    QList<PicInfo> _pics;
+    PostRating m_rating;
+    QList<PicInfo> m_pics;
 };
 
 #endif // POSTINFO_H

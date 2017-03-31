@@ -37,8 +37,8 @@ private:
     Job getJobSettings();
 
     Ui::MainWindow *ui;
-    Grabber* grabber;
-    BooruTest* tester;
+    Grabber* m_grabber;
+    BooruTest* m_tester;
 
     void bindHandlers();
 

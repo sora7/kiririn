@@ -6,7 +6,7 @@ BooruTest::BooruTest(QObject *parent)
 
 BooruTest::~BooruTest()
 {
-    delete this->parser;
+    delete this->m_parser;
 }
 
 void BooruTest::load(QStringList urlList)
@@ -64,11 +64,11 @@ void BooruTest::test(int datasetN)
         cout << "Dataset #" << datasetN << endl;
         QString fname = testFilename(datasetN);
         if (m_type == "search") {
-            SearchInfo sinfo =  parser->parseSearch(BooruParser::readFile(fname));
+            SearchInfo sinfo =  m_parser->parseSearch(BooruParser::readFile(fname));
             cout << sinfo << endl;
         }
         else {
-            PostInfo pinfo =  parser->parsePost(BooruParser::readFile(fname));
+            PostInfo pinfo =  m_parser->parsePost(BooruParser::readFile(fname));
             cout << pinfo << endl;
         }
     }
@@ -159,33 +159,33 @@ void BooruTest::testing()
 
 void BooruTest::setBooru(QString shortname)
 {
-    this->_booru = shortname;
+    this->m_booru = shortname;
     if (shortname == sankaku::shortname) {
-        parser = new SankakuChannelParser();
+        m_parser = new SankakuChannelParser();
     }
     if (shortname == idol::shortname) {
-        parser = new IdolComplexParser();
+        m_parser = new IdolComplexParser();
     }
     if (shortname == katawa::shortname) {
-        parser = new MishimmieParser();
+        m_parser = new MishimmieParser();
     }
     if (shortname == fourchan::shortname) {
-        parser = new FourChanHouseParser();
+        m_parser = new FourChanHouseParser();
     }
     if (shortname == konachan::shortname) {
-        parser = new KonachanParser();
+        m_parser = new KonachanParser();
     }
     if (shortname == yandere::shortname) {
-        parser = new YandeReParser();
+        m_parser = new YandeReParser();
     }
     if (shortname == danbooru::shortname) {
-        parser = new DanbooruParser();
+        m_parser = new DanbooruParser();
     }
     if (shortname == gelbooru::shortname) {
-        parser = new GelbooruParser();
+        m_parser = new GelbooruParser();
     }
     if (shortname == safebooru::shortname) {
-        parser = new SafebooruParser();
+        m_parser = new SafebooruParser();
     }
 }
 
@@ -198,5 +198,5 @@ QString BooruTest::testFilename(int datasetN)
 {
     //    filename template
     //    %booru%_%type%_%datasetN%.txt
-    return this->_booru + "_" + m_type + "_" + QString::number(datasetN) + ".txt";
+    return this->m_booru + "_" + m_type + "_" + QString::number(datasetN) + ".txt";
 }

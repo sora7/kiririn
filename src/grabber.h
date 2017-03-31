@@ -66,7 +66,7 @@ private:
     QQueue<PostInfo> m_posts;
     QQueue<PicInfo> m_pics;
 
-    void startJob(Job currJob);
+    void startJob();
     void selectParser(QString siteName);
 
     void searchProcess(QString searchUrl);

@@ -2,7 +2,7 @@
 
 SearchInfo::SearchInfo()
 {
-    this->_hasNext = false;
+    this->m_hasNext = false;
 }
 
 SearchInfo::~SearchInfo()
@@ -11,38 +11,38 @@ SearchInfo::~SearchInfo()
 
 bool SearchInfo::hasNext() const
 {
-    return _hasNext;
+    return m_hasNext;
 }
 
 QString SearchInfo::nextPage() const
 {
-    return _next_page;
+    return m_next_page;
 }
 
 void SearchInfo::setNextPage(const QString &value)
 {
     if (value.length() > 0) {
-        this->_hasNext = true;
+        this->m_hasNext = true;
     }
-    _next_page = value;
+    m_next_page = value;
 }
 
 QStringList SearchInfo::getPosts() const
 {
-    return _posts;
+    return m_posts;
 }
 
 void SearchInfo::setPosts(const QStringList &value)
 {
-    _posts = value;
+    m_posts = value;
 }
 
 ostream& operator <<(ostream &os, const SearchInfo &searchInfo)
 {
-    os << "next: " << searchInfo._next_page.toStdString() << endl;
-    for(int i = 0; i < searchInfo._posts.count(); i++) {
+    os << "next: " << searchInfo.m_next_page.toStdString() << endl;
+    for(int i = 0; i < searchInfo.m_posts.count(); i++) {
         cout << "post #" << i+1;
-        cout << " " << searchInfo._posts.at(i).toStdString() << endl;
+        cout << " " << searchInfo.m_posts.at(i).toStdString() << endl;
     }
     return os;
 }

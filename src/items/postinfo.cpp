@@ -31,51 +31,51 @@ string PostInfo::to_str(PostRating postRating)
 
 int PostInfo::getId() const
 {
-    return _id;
+    return m_id;
 }
 
 void PostInfo::setId(int value)
 {
-    _id = value;
+    m_id = value;
 }
 
 QString PostInfo::getUrl() const
 {
-    return _url;
+    return m_url;
 }
 
 void PostInfo::setUrl(const QString &value)
 {
-    _url = value;
+    m_url = value;
 }
 
 QList<PicInfo> PostInfo::getPics() const
 {
-    return _pics;
+    return m_pics;
 }
 
 void PostInfo::setPics(const QList<PicInfo> &value)
 {
-    _pics = value;
+    m_pics = value;
 }
 
 PostRating PostInfo::getRating() const
 {
-    return _rating;
+    return m_rating;
 }
 
 void PostInfo::setRating(const PostRating &value)
 {
-    _rating = value;
+    m_rating = value;
 }
 
 ostream& operator <<(ostream &os, const PostInfo &postInfo)
 {
-    os << "rating: " << PostInfo::to_str(postInfo._rating) << endl;
+    os << "rating: " << PostInfo::to_str(postInfo.m_rating) << endl;
     os << "========================== PICS ==========================" << endl;
-    for(int i = 0; i < postInfo._pics.count(); i++) {
+    for(int i = 0; i < postInfo.m_pics.count(); i++) {
         cout << "pic #" << i+1 << endl;
-        cout << postInfo._pics.at(i) << endl;
+        cout << postInfo.m_pics.at(i) << endl;
     }
     return os;
 }

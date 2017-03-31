@@ -48,13 +48,13 @@ public:
     QString getName() const;
     void setName(const QString &value);
 private:
-    int _id;
+    int m_id;
 
-    PicType _type;   //orig, resize
-    PicFormat _format; //jpg, png, webm, mp4
+    PicType m_type;   //orig, resize
+    PicFormat m_format; //jpg, png, webm, mp4
 
-    QString _url;
-    QString _name;
+    QString m_url;
+    QString m_name;
 };
 
 #endif // PICINFO_H

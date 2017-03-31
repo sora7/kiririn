@@ -10,17 +10,17 @@ PicNamer::~PicNamer()
 
 void PicNamer::setPattern(const QString pattern)
 {
-    this->_pattern = pattern;
+    this->m_pattern = pattern;
 }
 
 void PicNamer::setPicsPath(const QString picsPath)
 {
-    this->_picsPath = picsPath;
+    this->m_picsPath = picsPath;
 }
 
 QString PicNamer::checkName(const QString oldPicName) const
 {
-    QString picName = this->_pattern;
+    QString picName = this->m_pattern;
 
     // original pic names
     picName.replace("%fname%", oldPicName);
@@ -33,7 +33,7 @@ QString PicNamer::checkName(const QString oldPicName) const
 
 
     //filename check
-    QFileInfo info(QDir(this->_picsPath), picName);
+    QFileInfo info(QDir(this->m_picsPath), picName);
     QString picFullName = info.absoluteFilePath();
 
     QString picFileName = info.completeBaseName();
@@ -43,7 +43,7 @@ QString PicNamer::checkName(const QString oldPicName) const
     int count = 0;
     while (QFile::exists(picFullName)) {
         count++;
-        info = QFileInfo(QDir(this->_picsPath),
+        info = QFileInfo(QDir(this->m_picsPath),
                          picFileName +
                          "_" +
                          QString::number(count) +

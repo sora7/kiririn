@@ -25,9 +25,9 @@ public:
     void setPosts(const QStringList &value);
 
 private:
-    bool _hasNext;
-    QString _next_page;
-    QStringList _posts;
+    bool m_hasNext;
+    QString m_next_page;
+    QStringList m_posts;
 };
 
 #endif // SEARCHINFO_H

@@ -1,9 +1,9 @@
 #ifndef JOBMANAGER_H
 #define JOBMANAGER_H
 
-#include <QtSql>
-
 #include <iostream>
+
+#include <QtSql>
 
 #include "items/job.h"
 #include "items/searchinfo.h"
@@ -46,8 +46,8 @@ public:
     void picsDone(int jobID);
 
 private:
-    QSqlDatabase _job_db;
-    QSqlTableModel *_jobModel;
+    QSqlDatabase m_job_db;
+    QSqlTableModel *m_jobModel;
 
     void checkTables();
 

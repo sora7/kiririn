@@ -49,60 +49,60 @@ string PicInfo::to_str(PicFormat picFormat)
 
 QString PicInfo::getName() const
 {
-    return _name;
+    return m_name;
 }
 
 void PicInfo::setName(const QString &value)
 {
-    _name = value;
+    m_name = value;
 }
 
 QString PicInfo::getUrl() const
 {
-    return _url;
+    return m_url;
 }
 
 void PicInfo::setUrl(const QString &value)
 {
-    _url = value;
+    m_url = value;
 }
 
 PicFormat PicInfo::getFormat() const
 {
-    return _format;
+    return m_format;
 }
 
 void PicInfo::setFormat(const PicFormat &value)
 {
-    _format = value;
+    m_format = value;
 }
 
 PicType PicInfo::getType() const
 {
-    return _type;
+    return m_type;
 }
 
 void PicInfo::setType(const PicType &value)
 {
-    _type = value;
+    m_type = value;
 }
 
 int PicInfo::getId() const
 {
-    return _id;
+    return m_id;
 }
 
 void PicInfo::setId(int value)
 {
-    _id = value;
+    m_id = value;
 }
 
 ostream& operator <<(ostream &os, const PicInfo &picInfo)
 {
-    os << "url: " << picInfo._url.toStdString() << endl;
-    os << "name: " << picInfo._name.toStdString() << endl;
-    os << "type: " << PicInfo::to_str(picInfo._type);
-    os << "\tformat: " << PicInfo::to_str(picInfo._format) << endl;
+    os << "url: " << picInfo.m_url.toStdString() << endl;
+    os << "name: " << picInfo.m_name.toStdString() << endl;
+    os << "type: " << PicInfo::to_str(picInfo.m_type);
+    os << "\tformat: " << PicInfo::to_str(picInfo.m_format) << endl;
 //    os << "\tresolution: " << picInfo.res.toStdString();
 //    os << "\tsize: " << picInfo.size.toStdString() << endl;
     return os;

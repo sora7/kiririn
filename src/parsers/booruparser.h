@@ -11,23 +11,30 @@
 
 using namespace std;
 
-//struct booru_data {
-//    QString http_prefix;
-//    QString site_url;
-//    QString query_prefix;
-//    QString query_tag_sep;
-//    QString query_suffix;
-//    int tags_max;
+struct booru_config {
+    QString fullname;
+    QString shortname;
 
-//    QString rx_next;
-//    QString rx_post;
+    QString http_prefix;
+    QString site_url;
+    QString query_prefix;
+    QString query_tag_sep;
+    QString query_suffix;
+    int tags_max;
 
-//    QString rx_orig;
-//    QString rx_orig2;
-//    QString rx_resize;
+    QString rx_posShift;
 
-//    QString rx_rating;
-//};
+    QString rx_next;
+    QString nextPrefix;
+    QString rx_post;
+    QString postPrefix;
+
+    QString rx_orig;
+    QString rx_orig2;
+    QString rx_resize;
+
+    QString rx_rating;
+};
 
 class BooruParser
 {
@@ -44,12 +51,12 @@ public:
     virtual QString genQueryUrl(QStringList tags);
     //============================================//
 protected:
-    QString _http_prefix;
-    QString _site_url;
-    QString _query_prefix;
-    QString _query_tag_sep;
-    QString _query_suffix;
-    int _tags_max;
+    QString m_http_prefix;
+    QString m_site_url;
+    QString m_query_prefix;
+    QString m_query_tag_sep;
+    QString m_query_suffix;
+    int m_tags_max;
 
     void setNext(QString nextRegexStr);
     void setPost(QString postRegexStr);
@@ -59,13 +66,13 @@ protected:
 
     void setRating(QString ratingRegexStr);
 
-    QRegExp _rxNextPage;
-    QRegExp _rxPost;
+    QRegExp m_rxNextPage;
+    QRegExp m_rxPost;
 
-    QRegExp _rxOrig;
-    QRegExp _rxResize;
+    QRegExp m_rxOrig;
+    QRegExp m_rxResize;
 
-    QRegExp _rxRating;
+    QRegExp m_rxRating;
 
     QStringList findall(QString text, QRegExp rx, int pos_shift=0, QString prefix="");
     PicFormat checkFormat(QString str);
@@ -93,8 +100,8 @@ protected:
         Danbooru            *
         Gelbooru            *
         Zerochan
-        Minitokyo
         kpop.asiachan.com
+        Minitokyo
     Shimmie-alike:
         Mishimmie           *   ' '
         4chanhouse          *   '+'

@@ -33,9 +33,9 @@ public:
 public slots:
     void load_finish();
 private:
-    QString _booru;
+    QString m_booru;
     QString m_type;
-    BooruParser* parser;
+    BooruParser* m_parser;
 
     Loader* m_loader;
     QQueue<QString> m_urlList;
