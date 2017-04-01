@@ -16,6 +16,7 @@ Booru                                             |Original|Resized|Tag limit|Ra
 [Mishimmie](http://shimmie.katawa-shoujo.com/)    |yes     |no     |inf      |no    |12            |
 
 In not so far future:
+
 Booru                                             |Original|Resized|Tag limit|Rating|Posts per page|Comment
 --------------------------------------------------|--------|-------|---------|------|--------------|-------
 [Zerochan](http://www.zerochan.net/)              |yes     |yes    |inf      |yes   |              |some troubles with JS
