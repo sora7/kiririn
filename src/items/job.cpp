@@ -50,7 +50,7 @@ ostream& operator<<(ostream &os, const Job &job)
 
 //    QStringList fileTypesList(job.file_types.toList());
     os << "file types: ";
-    QList<PicFormat> picFormatList = job.m_file_types.toList();
+    QList<PicFormat> picFormatList = job.m_pic_formats.toList();
     for (int i = 0; i < picFormatList.count(); i++) {
         os << PicInfo::to_str(picFormatList.at(i));
         os << ", ";
@@ -83,22 +83,25 @@ void Job::addType(const PicType picType)
 
 void Job::addFormat(const PicFormat picFormat)
 {
-    this->m_file_types << picFormat;
+    this->m_pic_formats << picFormat;
 }
 
-bool Job::okRating(const PostRating postRating) const
+bool Job::okRating(const PostInfo postInfo) const
 {
-    return this->m_rating.contains(postRating);
+    if (m_rating.contains(RT_OTHER)) {
+        return true;
+    }
+    if (m_rating.contains(postInfo.getRating())) {
+        return true;
+    }
+    return false;
 }
 
-bool Job::okType(const PicType picType) const
+bool Job::picMatch(const PicInfo picInfo) const
 {
-    return this->m_pic_types.contains(picType);
-}
-
-bool Job::okFormat(const PicFormat picFormat) const
-{
-    return this->m_file_types.contains(picFormat);
+    bool result = m_pic_types.contains(picInfo.getType()) &&
+                  m_pic_formats.contains(picInfo.getFormat());
+    return result;
 }
 
 string Job::to_str(JobStatus jobStatus)
@@ -185,12 +188,12 @@ void Job::setLastSearchUrl(const QString &value)
 
 QSet<PicFormat> Job::getPicFormats() const
 {
-    return m_file_types;
+    return m_pic_formats;
 }
 
 void Job::setPicFormats(const QSet<PicFormat> picFormats)
 {
-    m_file_types = picFormats;
+    m_pic_formats = picFormats;
 }
 
 QSet<PostRating> Job::getRating() const

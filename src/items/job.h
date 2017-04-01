@@ -35,9 +35,8 @@ public:
     void addType(const PicType picType);
     void addFormat(const PicFormat picFormat);
 
-    bool okRating(const PostRating postRating) const;
-    bool okType(const PicType picType)const;
-    bool okFormat(const PicFormat picFormat) const;
+    bool okRating(const PostInfo postInfo) const;
+    bool picMatch(const PicInfo picInfo) const;
 
     JobStatus getStatus() const;
     void setStatus(const JobStatus jobStatus);
@@ -77,7 +76,7 @@ private:
 
     QSet<PicType> m_pic_types;
     QSet<PostRating> m_rating;
-    QSet<PicFormat> m_file_types;
+    QSet<PicFormat> m_pic_formats;
 
     QString m_lastSearchUrl;
 

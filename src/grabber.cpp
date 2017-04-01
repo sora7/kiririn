@@ -15,7 +15,7 @@ Grabber::~Grabber()
 {
     delete this->m_jobManager;
 
-    delete m_loader;
+    m_loader->deleteLater();
 
     if (m_parser) {
         delete m_parser;
@@ -211,19 +211,13 @@ void Grabber::postProcessFinish()
 {
     QString postHtml = m_loader->getHtml();
     PostInfo postInfo = m_parser->parsePost(postHtml);
-    if (
-            (m_currJob.okRating(postInfo.getRating())) ||
-            (m_currJob.okRating(RT_OTHER))
-        )
+    if ( m_currJob.okRating(postInfo) )
     {
         QList<PicInfo> picList = postInfo.getPics();
         QList<PicInfo> okList;
         for (int j = 0; j < picList.count(); j++) {
             PicInfo picInfo = picList.at(j);
-            if (
-                    ( m_currJob.okType(picInfo.getType()) ) &&
-                    ( m_currJob.okFormat(picInfo.getFormat()) )
-                )
+            if ( m_currJob.picMatch(picInfo) )
             {
                 //name?
                 picInfo.setName(
@@ -278,16 +272,10 @@ void Grabber::picDownloadStart()
     QString picUrl = m_currPic.getUrl();
 
     m_currPic_i++;
-    emit logMessage("Download pic #"
-                    + QString::number(m_currPic_i) + ' url: '
-                    + picUrl);
+    QString msgText = "Download pic #%1, url: %2";
+    emit logMessage(msgText.arg(m_currPic_i).arg(picUrl));
+
     m_loader->load(picUrl);
-//    m_loader = new Loader(picUrl);
-//    connect(m_loader,
-//            SIGNAL(downloaded()),
-//            this,
-//            SLOT(picDownloadFinish())
-//            );
 }
 
 void Grabber::picDownloadFinish()
