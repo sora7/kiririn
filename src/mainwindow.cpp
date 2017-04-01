@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->progressChange(0, 0);
+    this->onProgressMax(0);
+    this->ui->progressBar->setValue(0);
 
     ui->comboBox_site->addItem(sankaku::fullname,
                                QVariant(sankaku::shortname));
@@ -77,10 +78,14 @@ void MainWindow::contButtonHandler()
     this->m_grabber->contLastJob();
 }
 
-void MainWindow::progressChange(const int current, const int total)
+void MainWindow::onProgress()
 {
-    ui->progressBar->setValue(current);
-    ui->progressBar->setMaximum(total);
+    ui->progressBar->setValue(ui->progressBar->value() + 1);
+}
+
+void MainWindow::onProgressMax(int max)
+{
+    ui->progressBar->setMaximum(max);
 }
 
 void MainWindow::stageChange(GrabberStage stage)
@@ -88,7 +93,7 @@ void MainWindow::stageChange(GrabberStage stage)
     ui->label_STAGE->setText("Stage "
                              + QString::number((int)stage + 1)
                              + " of 3");
-    progressChange(0, 0);
+    onProgressMax(0);
 }
 
 void MainWindow::logMessage(QString messageText)
@@ -97,10 +102,6 @@ void MainWindow::logMessage(QString messageText)
     line += QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     line += "]" + messageText;
     ui->plainTextEdit_LOG->appendPlainText(line);
-//    ui->plainTextEdit_LOG->verticalScrollBar()
-//    ui->plainTextEdit_LOG->verticalScrollBar()->setValue(
-//                ui->plainTextEdit_LOG->verticalScrollBar()->maximum()
-//                );
 }
 
 Job MainWindow::getJobSettings()
@@ -163,9 +164,10 @@ void MainWindow::bindHandlers()
             SLOT(stopButtonHandler()));
     connect(ui->pushButton_CONTINUE, SIGNAL(clicked()), this,
             SLOT(contButtonHandler()));
-//    connect(this->grabber, SIGNAL(progressChange(int, int)), this,
-//            SLOT(progressChange(int,int)));
-    connect(this->m_grabber, SIGNAL(progressChange(int, int)), this, SLOT(progressChange(int,int)));
+
+    connect(this->m_grabber, SIGNAL(progress()), this, SLOT(onProgress()));
+    connect(this->m_grabber, SIGNAL(progressMax(int)), this, SLOT(onProgressMax(int)));
+
     connect(this->m_grabber, SIGNAL(stageChange(GrabberStage)), this, SLOT(stageChange(GrabberStage)));
     connect(this->m_grabber, SIGNAL(logMessage(QString)), this, SLOT(logMessage(QString)));
 }

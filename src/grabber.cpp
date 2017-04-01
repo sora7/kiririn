@@ -5,6 +5,7 @@ Grabber::Grabber(QObject *parent) :
 {
     this->m_jobManager = new JobManager();
     m_parser = NULL;
+    m_currPic_i = 0;
 }
 
 Grabber::~Grabber()
@@ -35,12 +36,9 @@ QSqlTableModel *Grabber::jobModel()
     return this->m_jobManager->jobModel();
 }
 
-void Grabber::startJob(/*Job currJob*/)
+void Grabber::startJob()
 {
-//    cout << currJob << endl;
     emit logMessage("Job start");
-
-//    m_currJob = currJob;
 
     selectParser(m_currJob.getSite());
 
@@ -50,7 +48,6 @@ void Grabber::startJob(/*Job currJob*/)
     switch (m_currJob.getStatus()) {
     case READY: {
         QString initialUrl = m_parser->genQueryUrl(m_currJob.getTags());
-//        cout << "QUERY: " << initialUrl.toStdString() << endl;
 
         this->m_jobManager->updSearch(initialUrl, m_currJob.getId());
         this->m_jobManager->updStatus(SEARCH_START, m_currJob.getId());
@@ -101,7 +98,6 @@ void Grabber::startJob(/*Job currJob*/)
 
 void Grabber::selectParser(QString siteName)
 {
-    //    BooruParser* parser;
     if (siteName == sankaku::shortname) {
         m_parser = new SankakuChannelParser();
     }
@@ -157,7 +153,6 @@ void Grabber::searchProcessFinish()
 {
     cout << "Search Finish" << endl;
     QString htmlText = m_loader->getHtml();
-//    delete m_loader;
 //    cout << htmlText.toStdString().substr(0, 500) << endl;
 
     SearchInfo searchInfo = m_parser->parseSearch(htmlText);
@@ -188,6 +183,7 @@ void Grabber::postsProcess()
 
     m_posts.append(this->m_jobManager->readPosts(m_currJob.getId()));
     emit logMessage("Count: " + QString::number(m_posts.length()));
+    emit progressMax(m_posts.length());
 
     if (!m_posts.isEmpty()) {
         m_currPost = m_posts.dequeue();
@@ -239,7 +235,7 @@ void Grabber::postProcessFinish()
         this->m_jobManager->addPics(okList, m_currJob.getId());
         this->m_jobManager->postDone(m_currPost.getId());
     }
-//    emit progressChange(i+1, postList.count());
+    emit progress();
 
     if (m_posts.isEmpty()) {
         this->m_jobManager->updStatus(POSTS_DONE, m_currJob.getId());
@@ -261,6 +257,7 @@ void Grabber::picsDownload()
 
     m_pics.append(this->m_jobManager->readPics(m_currJob.getId()));
     emit logMessage("Count: " + QString::number(m_pics.length()));
+    emit progressMax(m_pics.length());
 
     if (!m_pics.isEmpty()) {
         m_currPic = m_pics.dequeue();
@@ -272,8 +269,9 @@ void Grabber::picDownloadStart()
 {
     QString picUrl = m_currPic.getUrl();
 
-    emit logMessage("pic url: " + picUrl);
-//    emit logMessage("Download pic #" + QString::number(i+1));
+    m_currPic_i++;
+    emit logMessage("Download pic #" + QString::number(m_currPic_i) + ' url: '
+                    + picUrl);
     m_loader = new Loader(picUrl);
     connect(m_loader,
             SIGNAL(downloaded()),
@@ -289,6 +287,7 @@ void Grabber::picDownloadFinish()
     file.write(m_loader->downloadedData());
     file.close();
 
+    emit progress();
     this->m_jobManager->picDone(m_currPic.getId());
 
     if (!m_pics.isEmpty()) {
@@ -298,6 +297,7 @@ void Grabber::picDownloadFinish()
     else {
         this->m_jobManager->updStatus(PICS_DONE, m_currJob.getId());
         cout << "DOWNLOAD COMPLETE" << endl;
+        emit progress();
         emit logMessage("Pic download complete");
     }
 }

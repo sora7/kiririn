@@ -42,7 +42,10 @@ public:
     QSqlTableModel* jobModel();
 signals:
     void stageChange(GrabberStage stage);
-    void progressChange(int current, int total);
+
+    void progress();
+    void progressMax(int max);
+
     void logMessage(QString messageText);
 private slots:
     void searchProcessStart(QString searchUrl);
@@ -62,6 +65,7 @@ private:
     Job m_currJob;
     PostInfo m_currPost;
     PicInfo m_currPic;
+    int m_currPic_i;
 
     QQueue<PostInfo> m_posts;
     QQueue<PicInfo> m_pics;

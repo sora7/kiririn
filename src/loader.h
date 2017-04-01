@@ -22,6 +22,9 @@ class Loader : public QObject
 public:
     explicit Loader(QUrl url, QObject *parent = 0);
     virtual ~Loader();
+
+    void load(QString url);
+
     QByteArray downloadedData() const;
     QString getHtml() const;
 signals:

@@ -8,13 +8,6 @@ Loader::Loader(QUrl url, QObject *parent) : QObject(parent)
             SLOT(fileDownloaded(QNetworkReply*))
             );
 
-//    QList<QSslError> errIgnore;
-
-//    errIgnore << QSslError(QSslError::HostNameMismatch);
-//    errIgnore << QSslError(QSslError::SelfSignedCertificate);
-
-//    m_WebCtrl.ignoreSslErrors(errIgnore);
-
     connect(&m_WebCtrl,
             SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
             this,
@@ -22,10 +15,9 @@ Loader::Loader(QUrl url, QObject *parent) : QObject(parent)
             );
 
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.9) Gecko/20100101 Goanna/3.2 Firefox/45.9 PaleMoon/27.2.0");
+    request.setRawHeader(QString("User-Agent").toAscii(), DEFAULT_UA.toAscii());
 
     QSslConfiguration sslConfig = QSslConfiguration::defaultConfiguration();
-//    sslConfig.setPeerVerifyMode(QSslSocket::VerifyNone);
     sslConfig.setProtocol(QSsl::TlsV1);
     request.setSslConfiguration(sslConfig);
 
@@ -38,7 +30,6 @@ Loader::~Loader()
 
 QByteArray Loader::downloadedData() const
 {
-//    cout << "SIZE: " << m_DownloadedData.length() << endl;
     return m_DownloadedData;
 }
 
@@ -61,7 +52,6 @@ void Loader::fileDownloaded(QNetworkReply *pReply)
 
 void Loader::onSslErrors(QNetworkReply *pReply, const QList<QSslError>& lst)
 {
-    cout << "SSL ERROR" << endl;
+//    cout << "SSL ERROR" << endl;
     pReply->ignoreSslErrors(lst);
-//    QNetworkReply::ignoreSslErrors()
 }

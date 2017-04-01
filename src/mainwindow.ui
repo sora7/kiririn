@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>472</height>
+    <width>536</width>
+    <height>461</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
        <attribute name="title">
         <string>Add Job</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
+       <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
@@ -294,7 +294,7 @@
           <item>
            <widget class="QLabel" name="label_STAGE">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Stage 0 of 3</string>
             </property>
            </widget>
           </item>
@@ -308,7 +308,18 @@
          </layout>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit_LOG"/>
+         <widget class="QGroupBox" name="groupBox_4">
+          <property name="title">
+           <string>Log</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QPlainTextEdit" name="plainTextEdit_LOG"/>
+           </item>
+          </layout>
+          <zorder>plainTextEdit_LOG</zorder>
+          <zorder>plainTextEdit_LOG</zorder>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -331,7 +342,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>535</width>
+     <width>536</width>
      <height>21</height>
     </rect>
    </property>
@@ -341,7 +352,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

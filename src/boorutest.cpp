@@ -21,12 +21,11 @@ void BooruTest::load_start(QString url)
     cout << "load start" << endl;
     m_loader = new Loader(url);
 
-    bool daun = connect(m_loader,
+    connect(m_loader,
             SIGNAL(downloaded()),
             this,
             SLOT(load_finish())
             );
-    cout << daun << endl;
 }
 
 void BooruTest::load_finish()
@@ -42,8 +41,6 @@ void BooruTest::load_finish()
     file.open(QIODevice::WriteOnly);
     file.write(m_loader->downloadedData());
     file.close();
-
-    delete m_loader;
 
     if (!m_urlList.empty()) {
         QString url = m_urlList.dequeue();

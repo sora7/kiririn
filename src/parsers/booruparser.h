@@ -25,9 +25,9 @@ struct booru_config {
     QString rx_posShift;
 
     QString rx_next;
-    QString nextPrefix;
+    QString next_prefix;
     QString rx_post;
-    QString postPrefix;
+    QString post_prefix;
 
     QString rx_orig;
     QString rx_orig2;

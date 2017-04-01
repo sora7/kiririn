@@ -29,7 +29,9 @@ public slots:
     void stopButtonHandler();
     void contButtonHandler();
 
-    void progressChange(const int current, const int total);
+    void onProgress();
+    void onProgressMax(int max);
+
     void stageChange(GrabberStage stage);
 
     void logMessage(QString messageText);
