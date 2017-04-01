@@ -1,12 +1,20 @@
 #include "boorutest.h"
 
-BooruTest::BooruTest(QObject *parent)
+BooruTest::BooruTest(QObject *parent) : QObject(parent)
 {
+    m_loader = new Loader();
+
+    connect(m_loader,
+            SIGNAL(downloaded()),
+            this,
+            SLOT(load_finish())
+            );
 }
 
 BooruTest::~BooruTest()
 {
     delete this->m_parser;
+    delete this->m_loader;
 }
 
 void BooruTest::load(QStringList urlList)
@@ -19,13 +27,8 @@ void BooruTest::load(QStringList urlList)
 void BooruTest::load_start(QString url)
 {
     cout << "load start" << endl;
-    m_loader = new Loader(url);
 
-    connect(m_loader,
-            SIGNAL(downloaded()),
-            this,
-            SLOT(load_finish())
-            );
+    m_loader->load(url);
 }
 
 void BooruTest::load_finish()

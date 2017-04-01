@@ -1,6 +1,6 @@
 #include "loader.h"
 
-Loader::Loader(QUrl url, QObject *parent) : QObject(parent)
+Loader::Loader(QObject *parent) : QObject(parent)
 {
     connect(&m_WebCtrl,
             SIGNAL(finished(QNetworkReply*)),
@@ -13,19 +13,24 @@ Loader::Loader(QUrl url, QObject *parent) : QObject(parent)
             this,
             SLOT(onSslErrors(QNetworkReply*,QList<QSslError>))
             );
-
-    QNetworkRequest request(url);
-    request.setRawHeader(QString("User-Agent").toAscii(), DEFAULT_UA.toAscii());
-
-    QSslConfiguration sslConfig = QSslConfiguration::defaultConfiguration();
-    sslConfig.setProtocol(QSsl::TlsV1);
-    request.setSslConfiguration(sslConfig);
-
-    m_WebCtrl.get(request);
 }
 
 Loader::~Loader()
 {
+}
+
+void Loader::load(QString url)
+{
+    QUrl url2(url);
+    QNetworkRequest request(url2);
+    request.setRawHeader(QString("User-Agent").toAscii(), DEFAULT_UA.toAscii());
+
+    QSslConfiguration sslConfig = QSslConfiguration::defaultConfiguration();
+
+    sslConfig.setProtocol(QSsl::TlsV1);
+    request.setSslConfiguration(sslConfig);
+
+    m_WebCtrl.get(request);
 }
 
 QByteArray Loader::downloadedData() const

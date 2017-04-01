@@ -5,6 +5,9 @@ Grabber::Grabber(QObject *parent) :
 {
     this->m_jobManager = new JobManager();
     m_parser = NULL;
+
+    m_loader = new Loader();
+
     m_currPic_i = 0;
 }
 
@@ -12,7 +15,7 @@ Grabber::~Grabber()
 {
     delete this->m_jobManager;
 
-//    delete m_loader;
+    delete m_loader;
 
     if (m_parser) {
         delete m_parser;
@@ -135,28 +138,26 @@ void Grabber::searchProcess(QString searchUrl)
     emit logMessage("Search url: " + searchUrl);
     emit stageChange(SEARCH);
 
-    searchProcessStart(searchUrl);
-}
-
-void Grabber::searchProcessStart(QString searchUrl)
-{
-    m_loader = new Loader(searchUrl);
-//    cout << "LOADER" << endl;
     connect(m_loader,
             SIGNAL(downloaded()),
             this,
             SLOT(searchProcessFinish())
             );
+
+    searchProcessStart(searchUrl);
+}
+
+void Grabber::searchProcessStart(QString searchUrl)
+{
+    m_loader->load(searchUrl);
 }
 
 void Grabber::searchProcessFinish()
 {
-    cout << "Search Finish" << endl;
     QString htmlText = m_loader->getHtml();
-//    cout << htmlText.toStdString().substr(0, 500) << endl;
 
     SearchInfo searchInfo = m_parser->parseSearch(htmlText);
-//    cout << searchInfo << endl;
+
     emit logMessage(QString::number(searchInfo.getPosts().length())
                     + " posts found");
     this->m_jobManager->addPosts(searchInfo.getPosts(), m_currJob.getId());
@@ -170,6 +171,7 @@ void Grabber::searchProcessFinish()
     }
     else {
         this->m_jobManager->updStatus(SEARCH_DONE, m_currJob.getId());
+        m_loader->disconnect(SIGNAL(downloaded()));
         emit logMessage("Search processing finish");
         postsProcess();
     }
@@ -185,6 +187,12 @@ void Grabber::postsProcess()
     emit logMessage("Count: " + QString::number(m_posts.length()));
     emit progressMax(m_posts.length());
 
+    connect(m_loader,
+            SIGNAL(downloaded()),
+            this,
+            SLOT(postProcessFinish())
+            );
+
     if (!m_posts.isEmpty()) {
         m_currPost = m_posts.dequeue();
         postProcessStart();
@@ -196,24 +204,17 @@ void Grabber::postProcessStart()
     QString postUrl = m_currPost.getUrl();
 
     emit logMessage("post url: " + postUrl);
-    m_loader = new Loader(postUrl);
-    connect(m_loader,
-            SIGNAL(downloaded()),
-            this,
-            SLOT(postProcessFinish())
-            );
+    m_loader->load(postUrl);
 }
 
 void Grabber::postProcessFinish()
 {
-//    Job currJob = m_jobManager->getJob(m_jobID);
-
     QString postHtml = m_loader->getHtml();
     PostInfo postInfo = m_parser->parsePost(postHtml);
     if (
             (m_currJob.okRating(postInfo.getRating())) ||
             (m_currJob.okRating(RT_OTHER))
-            )
+        )
     {
         QList<PicInfo> picList = postInfo.getPics();
         QList<PicInfo> okList;
@@ -222,7 +223,7 @@ void Grabber::postProcessFinish()
             if (
                     ( m_currJob.okType(picInfo.getType()) ) &&
                     ( m_currJob.okFormat(picInfo.getFormat()) )
-                    )
+                )
             {
                 //name?
                 picInfo.setName(
@@ -239,6 +240,7 @@ void Grabber::postProcessFinish()
 
     if (m_posts.isEmpty()) {
         this->m_jobManager->updStatus(POSTS_DONE, m_currJob.getId());
+        m_loader->disconnect(SIGNAL(downloaded()));
         cout << "POSTS FINISH" << endl;
         emit logMessage("Post processing finish");
         picsDownload();
@@ -259,6 +261,12 @@ void Grabber::picsDownload()
     emit logMessage("Count: " + QString::number(m_pics.length()));
     emit progressMax(m_pics.length());
 
+    connect(m_loader,
+            SIGNAL(downloaded()),
+            this,
+            SLOT(picDownloadFinish())
+            );
+
     if (!m_pics.isEmpty()) {
         m_currPic = m_pics.dequeue();
         picDownloadStart();
@@ -270,14 +278,16 @@ void Grabber::picDownloadStart()
     QString picUrl = m_currPic.getUrl();
 
     m_currPic_i++;
-    emit logMessage("Download pic #" + QString::number(m_currPic_i) + ' url: '
+    emit logMessage("Download pic #"
+                    + QString::number(m_currPic_i) + ' url: '
                     + picUrl);
-    m_loader = new Loader(picUrl);
-    connect(m_loader,
-            SIGNAL(downloaded()),
-            this,
-            SLOT(picDownloadFinish())
-            );
+    m_loader->load(picUrl);
+//    m_loader = new Loader(picUrl);
+//    connect(m_loader,
+//            SIGNAL(downloaded()),
+//            this,
+//            SLOT(picDownloadFinish())
+//            );
 }
 
 void Grabber::picDownloadFinish()
@@ -296,8 +306,9 @@ void Grabber::picDownloadFinish()
     }
     else {
         this->m_jobManager->updStatus(PICS_DONE, m_currJob.getId());
-        cout << "DOWNLOAD COMPLETE" << endl;
+        m_loader->disconnect(SIGNAL(downloaded()));
         emit progress();
         emit logMessage("Pic download complete");
+        cout << "DOWNLOAD COMPLETE" << endl;
     }
 }

@@ -20,7 +20,7 @@ class Loader : public QObject
 {
     Q_OBJECT
 public:
-    explicit Loader(QUrl url, QObject *parent = 0);
+    explicit Loader(QObject *parent = 0);
     virtual ~Loader();
 
     void load(QString url);
