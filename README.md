@@ -3,6 +3,7 @@ Picture grabber for Danbooru-like sites
 
 # Booru list
 Supported:
+
 Booru                                             |Original|Resized|Tag limit|Rating|Posts per page|Comment
 --------------------------------------------------|--------|-------|---------|------|--------------|-------
 [SankakuChannel](https://chan.sankakucomplex.com) |yes     |yes    |4        |yes   |20            |
